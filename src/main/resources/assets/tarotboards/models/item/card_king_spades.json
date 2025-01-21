@@ -1,0 +1,6 @@
+{
+	"parent": "tarotboards:item/card_base",
+	"textures": {
+		"0": "tarotboards:item/cards/card_king_spades"
+	}
+}

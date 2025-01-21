@@ -1,0 +1,70 @@
+{
+	"parent": "tarotboards:item/card_base",
+	"overrides": [
+
+		{"predicate": {"value": 0},  "model": "tarotboards:item/card_ace_spades"},
+		{"predicate": {"value": 1},  "model": "tarotboards:item/card_ace_clubs"},
+		{"predicate": {"value": 2},  "model": "tarotboards:item/card_ace_diamonds"},
+		{"predicate": {"value": 3},  "model": "tarotboards:item/card_ace_hearts"},
+
+		{"predicate": {"value": 4},  "model": "tarotboards:item/card_2_spades"},
+		{"predicate": {"value": 5},  "model": "tarotboards:item/card_2_clubs"},
+		{"predicate": {"value": 6},  "model": "tarotboards:item/card_2_diamonds"},
+		{"predicate": {"value": 7},  "model": "tarotboards:item/card_2_hearts"},
+
+		{"predicate": {"value": 8},  "model": "tarotboards:item/card_3_spades"},
+		{"predicate": {"value": 9},  "model": "tarotboards:item/card_3_clubs"},
+		{"predicate": {"value": 10}, "model": "tarotboards:item/card_3_diamonds"},
+		{"predicate": {"value": 11}, "model": "tarotboards:item/card_3_hearts"},
+
+		{"predicate": {"value": 12}, "model": "tarotboards:item/card_4_spades"},
+		{"predicate": {"value": 13}, "model": "tarotboards:item/card_4_clubs"},
+		{"predicate": {"value": 14}, "model": "tarotboards:item/card_4_diamonds"},
+		{"predicate": {"value": 15}, "model": "tarotboards:item/card_4_hearts"},
+
+		{"predicate": {"value": 16}, "model": "tarotboards:item/card_5_spades"},
+		{"predicate": {"value": 17}, "model": "tarotboards:item/card_5_clubs"},
+		{"predicate": {"value": 18}, "model": "tarotboards:item/card_5_diamonds"},
+		{"predicate": {"value": 19}, "model": "tarotboards:item/card_5_hearts"},
+
+		{"predicate": {"value": 20}, "model": "tarotboards:item/card_6_spades"},
+		{"predicate": {"value": 21}, "model": "tarotboards:item/card_6_clubs"},
+		{"predicate": {"value": 22}, "model": "tarotboards:item/card_6_diamonds"},
+		{"predicate": {"value": 23}, "model": "tarotboards:item/card_6_hearts"},
+
+		{"predicate": {"value": 24}, "model": "tarotboards:item/card_7_spades"},
+		{"predicate": {"value": 25}, "model": "tarotboards:item/card_7_clubs"},
+		{"predicate": {"value": 26}, "model": "tarotboards:item/card_7_diamonds"},
+		{"predicate": {"value": 27}, "model": "tarotboards:item/card_7_hearts"},
+
+		{"predicate": {"value": 28}, "model": "tarotboards:item/card_8_spades"},
+		{"predicate": {"value": 29}, "model": "tarotboards:item/card_8_clubs"},
+		{"predicate": {"value": 30}, "model": "tarotboards:item/card_8_diamonds"},
+		{"predicate": {"value": 31}, "model": "tarotboards:item/card_8_hearts"},
+
+		{"predicate": {"value": 32}, "model": "tarotboards:item/card_9_spades"},
+		{"predicate": {"value": 33}, "model": "tarotboards:item/card_9_clubs"},
+		{"predicate": {"value": 34}, "model": "tarotboards:item/card_9_diamonds"},
+		{"predicate": {"value": 35}, "model": "tarotboards:item/card_9_hearts"},
+
+		{"predicate": {"value": 36}, "model": "tarotboards:item/card_10_spades"},
+		{"predicate": {"value": 37}, "model": "tarotboards:item/card_10_clubs"},
+		{"predicate": {"value": 38}, "model": "tarotboards:item/card_10_diamonds"},
+		{"predicate": {"value": 39}, "model": "tarotboards:item/card_10_hearts"},
+
+		{"predicate": {"value": 40}, "model": "tarotboards:item/card_jack_spades"},
+		{"predicate": {"value": 41}, "model": "tarotboards:item/card_jack_clubs"},
+		{"predicate": {"value": 42}, "model": "tarotboards:item/card_jack_diamonds"},
+		{"predicate": {"value": 43}, "model": "tarotboards:item/card_jack_hearts"},
+
+		{"predicate": {"value": 44}, "model": "tarotboards:item/card_queen_spades"},
+		{"predicate": {"value": 45}, "model": "tarotboards:item/card_queen_clubs"},
+		{"predicate": {"value": 46}, "model": "tarotboards:item/card_queen_diamonds"},
+		{"predicate": {"value": 47}, "model": "tarotboards:item/card_queen_hearts"},
+
+		{"predicate": {"value": 48}, "model": "tarotboards:item/card_king_spades"},
+		{"predicate": {"value": 49}, "model": "tarotboards:item/card_king_clubs"},
+		{"predicate": {"value": 50}, "model": "tarotboards:item/card_king_diamonds"},
+		{"predicate": {"value": 51}, "model": "tarotboards:item/card_king_hearts"}
+	]
+}
