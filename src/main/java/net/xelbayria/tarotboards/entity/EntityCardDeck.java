@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import net.xelbayria.tarotboards.TarotBoards;
 import net.xelbayria.tarotboards.entity.base.EntityStacked;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
 import net.xelbayria.tarotboards.init.InitItems;
@@ -26,35 +27,29 @@ import net.xelbayria.tarotboards.util.ItemHelper;
 public class EntityCardDeck extends EntityStacked {
 
     private static final EntityDataAccessor<Float> ROTATION = SynchedEntityData.defineId(EntityCardDeck.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Byte> SKIN_ID = SynchedEntityData.defineId(EntityCardDeck.class, EntityDataSerializers.BYTE);
 
     public EntityCardDeck(EntityType<? extends EntityCardDeck> type, Level world) {
         super(type, world);
     }
 
-    public EntityCardDeck(Level world, Vec3 position, float rotation, byte skinID) {
+    public EntityCardDeck(Level world, Vec3 position, float rotation) {
         super(InitEntityTypes.CARD_DECK.get(), world, position);
 
         createAndFillDeck();
         shuffleStack();
 
         this.entityData.set(ROTATION, rotation);
-        this.entityData.set(SKIN_ID, skinID);
     }
 
     public float getRotation() {
         return this.entityData.get(ROTATION);
     }
 
-    public byte getSkinID() {
-        return this.entityData.get(SKIN_ID);
-    }
-
     private void createAndFillDeck() {
 
-        Byte[] newStack = new Byte[52];
+        Integer[] newStack = new Integer[TarotBoards.NUM_CARDS];
 
-        for (byte index = 0; index < 52; index++) {
+        for (int index = 0; index < TarotBoards.NUM_CARDS; index++) {
             newStack[index] = index;
         }
 
@@ -73,7 +68,6 @@ public class EntityCardDeck extends EntityStacked {
 
                 card.setDamageValue(cardID);
                 ItemHelper.getNBT(card).putUUID("UUID", getUUID());
-                ItemHelper.getNBT(card).putByte("SkinID", this.entityData.get(SKIN_ID));
                 ItemHelper.getNBT(card).putBoolean("Covered", true);
 
                 if (!level().isClientSide) {
@@ -97,7 +91,6 @@ public class EntityCardDeck extends EntityStacked {
 
             if (player.isCrouching()) {
                 ItemStack deck = new ItemStack(InitItems.CARD_DECK.get());
-                ItemHelper.getNBT(deck).putByte("SkinID", this.entityData.get(SKIN_ID));
 
                 ItemHelper.spawnStackAtEntity(level(), player, deck);
                 discard();
@@ -115,21 +108,18 @@ public class EntityCardDeck extends EntityStacked {
     @Override
     public void moreData() {
         this.entityData.define(ROTATION, 0F);
-        this.entityData.define(SKIN_ID, (byte) 0);
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.entityData.set(ROTATION, compoundTag.getFloat("Rotation"));
-        this.entityData.set(SKIN_ID, compoundTag.getByte("SkinID"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putFloat("Rotation", this.entityData.get(ROTATION));
-        compoundTag.putByte("SkinID", this.entityData.get(SKIN_ID));
     }
 
     @Override

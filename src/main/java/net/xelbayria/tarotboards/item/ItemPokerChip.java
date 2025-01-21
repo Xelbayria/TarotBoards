@@ -29,10 +29,10 @@ import java.util.UUID;
 
 public class ItemPokerChip extends ItemBase {
 
-    private final byte chipID;
+    private final int chipID;
     private final int value;
 
-    public ItemPokerChip(byte chipID, int value) {
+    public ItemPokerChip(int chipID, int value) {
         super(new Properties());
         this.chipID = chipID;
         this.value = value;
@@ -42,24 +42,12 @@ public class ItemPokerChip extends ItemBase {
         return new UnitChatMessage("poker_chip", players);
     }
 
-    public byte getChipID() {
+    public int getChipID() {
         return this.chipID;
     }
 
-    public static Item getPokerChip(byte pokerChipID) {
-
-        switch (pokerChipID) {
-            case 1:
-                return InitItems.POKER_CHIP_RED.get();
-            case 2:
-                return InitItems.POKER_CHIP_BLUE.get();
-            case 3:
-                return InitItems.POKER_CHIP_GREEN.get();
-            case 4:
-                return InitItems.POKER_CHIP_BLACK.get();
-        }
-
-        return InitItems.POKER_CHIP_WHITE.get();
+    public static Item getPokerChip(int pokerChipID) {
+        return InitItems.POKER_CHIP.get();
     }
 
     @Override

@@ -1,9 +1,6 @@
 {
-	"parent": "item/generated",
-	"overrides": [
-		{"predicate": {"skin": 0},  "model": "tarotboards:item/card_deck_blue"},
-		{"predicate": {"skin": 1},  "model": "tarotboards:item/card_deck_red"},
-		{"predicate": {"skin": 2},  "model": "tarotboards:item/card_deck_black"},
-		{"predicate": {"skin": 3},  "model": "tarotboards:item/card_deck_pig"}
-	]
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "tarotboards:item/card_deck"
+	}
 }

@@ -38,7 +38,7 @@ public class EntityPokerChip extends EntityStacked {
         super(type, world);
     }
 
-    public EntityPokerChip(Level world, Vec3 position, UUID ownerID, String ownerName, byte firstChipID) {
+    public EntityPokerChip(Level world, Vec3 position, UUID ownerID, String ownerName, int firstChipID) {
         super(InitEntityTypes.POKER_CHIP.get(), world, position);
 
         createStack();
@@ -53,7 +53,7 @@ public class EntityPokerChip extends EntityStacked {
 
     private void takeChip(Player player) {
 
-        byte chipID = getTopStackID();
+        int chipID = getTopStackID();
 
         if (!level().isClientSide) spawnChip(player, ItemPokerChip.getPokerChip(chipID), 1);
 
@@ -121,29 +121,16 @@ public class EntityPokerChip extends EntityStacked {
 
         if (pSource.getDirectEntity() instanceof Player player) {
 
-            int whiteAmount = 0;
-            int redAmount = 0;
-            int blueAmount = 0;
-            int greenAmount = 0;
-            int blackAmount = 0;
+            int amount = 0;
 
             for (int i = 0; i < this.entityData.get(STACK).length; i++) {
 
-                byte chipID = getIDAt(i);
+                int chipID = getIDAt(i);
 
-                if (chipID == 0) whiteAmount++;
-                if (chipID == 1) redAmount++;
-                if (chipID == 2) blueAmount++;
-                if (chipID == 3) greenAmount++;
-                if (chipID == 4) blackAmount++;
+                if (chipID == 0) amount++;
             }
 
-            if (whiteAmount > 0) spawnChip(player, InitItems.POKER_CHIP_WHITE.get(), whiteAmount);
-            if (redAmount > 0) spawnChip(player, InitItems.POKER_CHIP_RED.get(), redAmount);
-            if (blueAmount > 0) spawnChip(player, InitItems.POKER_CHIP_BLUE.get(), blueAmount);
-            if (greenAmount > 0) spawnChip(player, InitItems.POKER_CHIP_GREEN.get(), greenAmount);
-            if (blackAmount > 0) spawnChip(player, InitItems.POKER_CHIP_BLACK.get(), blackAmount);
-
+            if (amount > 0) spawnChip(player, InitItems.POKER_CHIP.get(), amount);
             discard();
 
             return false;

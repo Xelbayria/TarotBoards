@@ -1,6 +1,7 @@
 package net.xelbayria.tarotboards.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -10,10 +11,12 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.xelbayria.tarotboards.TarotBoards;
+
+import java.util.List;
+import java.util.regex.Matcher;
 
 public class CardHelper {
-
-    public static final String[] CARD_SKIN_NAMES = {"card.skin.blue", "card.skin.red", "card.skin.black", "card.skin.pig"};
 
     public static void renderItem(ItemStack stack, Level level, double offsetX, double offsetY, double offsetZ, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight) {
         matrixStack.pushPose();
@@ -24,50 +27,52 @@ public class CardHelper {
         matrixStack.popPose();
     }
 
-    public static MutableComponent getCardName(int id) {
-
-        String type = "card.ace";
-
-        int typeID = id / 4 + 1;
-
-        if (typeID > 1 && typeID < 11) {
-            type = "" + typeID;
+    public static MutableComponent getCardName(String name) {
+        Matcher matcher = TarotBoards.CARD_PATTERN.matcher(name);
+        if (matcher.matches() && !TarotBoards.wilds.contains(name)) {
+            // Process normal cards
+            String value = matcher.group("value");
+            String suit = matcher.group("suit");
+            return Component.literal(value).append(" ").append(Component.literal("of").append(" ").append(Component.literal(suit))).withStyle(getStyle(suit));
+        } else {
+            return Component.literal(name).append("\nWild").withStyle(ChatFormatting.WHITE);
         }
-
-        if (typeID > 10) {
-            type = "card.jack";
-
-            if (typeID > 11) {
-                type = "card.queen";
-
-                if (typeID > 12) {
-                    type = "card.king";
-                }
-            }
-        }
-
-        String suite = "card.spades";
-
-        int suiteID = id % 4;
-
-        switch(suiteID) {
-
-            case 1: {
-                suite = "card.clubs";
-                break;
-            }
-
-            case 2: {
-                suite = "card.diamonds";
-                break;
-            }
-
-            case 3: {
-                suite = "card.hearts";
-                break;
-            }
-        }
-
-        return Component.translatable(type).append(" ").append(Component.translatable("card.of").append(" ").append(Component.translatable(suite)));
     }
+
+    public static ChatFormatting getStyle(String suit) {
+        if (RED_SUITS.contains(suit)) {
+            return ChatFormatting.RED;
+        } else if (BLUE_SUITS.contains(suit)) {
+            return ChatFormatting.AQUA;
+        } else if (YELLOW_SUITS.contains(suit)) {
+            return ChatFormatting.YELLOW;
+        } else if (GREEN_SUITS.contains(suit)) {
+            return ChatFormatting.GREEN;
+        } else if (PURPLE_SUITS.contains(suit)) {
+            return ChatFormatting.LIGHT_PURPLE;
+        } else {
+            return ChatFormatting.WHITE;
+        }
+    }
+
+    // List of suits categorized by color
+    public static final List<String> BLUE_SUITS = List.of(
+            "Arcs", "Spades", "Clouds", "Clovers", "Comets", "Crescents", "Crosses", "Crowns"
+    );
+
+    public static final List<String> RED_SUITS = List.of(
+            "Diamonds", "Embers", "Eyes", "Gears", "Glyphs", "Flames", "Flowers", "Hearts"
+    );
+
+    public static final List<String> YELLOW_SUITS = List.of(
+            "Arrows", "Keys", "Locks", "Leaves", "Mountains", "Points", "Scrolls", "Shells"
+    );
+
+    public static final List<String> GREEN_SUITS = List.of(
+            "Shields", "Spirals", "Stars", "Suns", "Swords", "Tridents", "Trees", "Waves"
+    );
+
+    public static final List<String> PURPLE_SUITS = List.of(
+            "Quasars", "Runes", "Omens", "Sigils", "Orbs", "Veils", "Looms", "Shards"
+    );
 }

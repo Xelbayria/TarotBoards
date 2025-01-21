@@ -13,13 +13,15 @@ import java.util.List;
 
 public class ItemCard extends ItemCardCovered {
 
-    public ItemCard() {
-//        covered = false;
+    String name;
+
+    public ItemCard(String name) {
+        this.name = name;
     }
 
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(CardHelper.getCardName(pStack.getDamageValue()).withStyle(ChatFormatting.GOLD));
+        pTooltipComponents.add(CardHelper.getCardName(name));
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
 }

@@ -1,5 +1,9 @@
 package net.xelbayria.tarotboards.item;
 
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.xelbayria.tarotboards.TarotBoards;
 import net.xelbayria.tarotboards.entity.EntityCard;
 import net.xelbayria.tarotboards.entity.EntityCardDeck;
 import net.xelbayria.tarotboards.init.InitItems;
@@ -24,8 +28,7 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ItemCardCovered extends ItemBase {
 
@@ -35,26 +38,66 @@ public class ItemCardCovered extends ItemBase {
 
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, @NotNull TooltipFlag pIsAdvanced) {
-        CompoundTag nbt = ItemHelper.getNBT(pStack);
-        pTooltipComponents.add(Component.translatable("lore.cover").append(" ").withStyle(ChatFormatting.GRAY).append(Component.translatable(CardHelper.CARD_SKIN_NAMES[nbt.getByte("SkinID")]).withStyle(ChatFormatting.AQUA)));
+        pTooltipComponents.add(Component.translatable("lore.cover").append(" ").withStyle(ChatFormatting.GRAY));
+    }
+
+    private Set<Integer> usedCardIDs = new HashSet<>();
+
+    private int generateValidCardID() {
+        int cardID;
+        Random random = new Random();
+        do {
+            cardID = random.nextInt(TarotBoards.NUM_CARDS); // Generate random ID
+        } while (usedCardIDs.contains(cardID)); // Keep generating if ID is already used
+
+        usedCardIDs.add(cardID); // Mark this ID as used
+        return cardID;
     }
 
     public void flipCard(ItemStack heldItem, LivingEntity entity) {
-
         if (entity instanceof Player player) {
-
             if (heldItem.getItem() instanceof ItemCardCovered) {
                 CompoundTag heldNBT = ItemHelper.getNBT(heldItem);
 
-                Item nextCard = InitItems.CARD.get();
-                if (!heldNBT.getBoolean("Covered")) nextCard = InitItems.CARD_COVERED.get();
+                // Initialize flip history if it doesn't exist
+                if (!heldNBT.contains("FlipHistory")) {
+                    heldNBT.put("FlipHistory", new ListTag());
+                }
+                ListTag flipHistory = heldNBT.getList("FlipHistory", Tag.TAG_INT);
+
+                boolean isCurrentlyCovered = heldNBT.getBoolean("Covered");
+                int cardID;
+
+                if (isCurrentlyCovered) {
+                    // If uncovering: Get the last card from history or generate a new one
+                    if(!ItemHelper.getNBT(heldItem).contains("CardID")) {
+                        if (!flipHistory.isEmpty()) {
+                            cardID = heldNBT.getInt("CardID");
+                        } else {
+                            cardID = generateValidCardID();
+                            flipHistory.add(IntTag.valueOf(cardID));
+                            ItemHelper.getNBT(heldItem).putInt("CardID", cardID);
+                        }
+                    } else {
+                        if (!flipHistory.isEmpty()) {
+                            cardID = heldNBT.getInt("CardID");
+                            flipHistory.remove(flipHistory.size() - 1);
+                        } else {
+                            cardID = heldNBT.getInt("CardID");
+                        }
+                    }
+                } else {
+                    cardID = heldNBT.getInt("CardID");
+                }
+
+                // Use the cardID to fetch the specific card
+                Item nextCard = InitItems.cards.get(cardID).get();
 
                 ItemStack newCard = new ItemStack(nextCard);
-                newCard.setDamageValue(heldItem.getDamageValue());
-
+                ItemHelper.getNBT(newCard).putInt("CardID", cardID);
                 ItemHelper.getNBT(newCard).putUUID("UUID", heldNBT.getUUID("UUID"));
-                ItemHelper.getNBT(newCard).putByte("SkinID", heldNBT.getByte("SkinID"));
-                ItemHelper.getNBT(newCard).putBoolean("Covered", !heldNBT.getBoolean("Covered"));
+                ItemHelper.getNBT(newCard).putBoolean("Covered", !isCurrentlyCovered);
+                ItemHelper.getNBT(newCard).put("FlipHistory", flipHistory); // Save updated history
 
                 player.setItemInHand(InteractionHand.MAIN_HAND, newCard);
             }
@@ -117,7 +160,7 @@ public class ItemCardCovered extends ItemBase {
                     if (closeDeck.getUUID().equals(deckID)) {
 
                         Level world = pContext.getLevel();
-                        EntityCard cardDeck = new EntityCard(world, pContext.getClickLocation(), pContext.getRotation(), nbt.getByte("SkinID"), deckID, nbt.getBoolean("Covered"), (byte) pContext.getItemInHand().getDamageValue());
+                        EntityCard cardDeck = new EntityCard(world, pContext.getClickLocation(), pContext.getRotation(), deckID, nbt.getBoolean("Covered"), nbt.getInt("CardID"));
                         world.addFreshEntity(cardDeck);
                         pContext.getItemInHand().shrink(1);
 

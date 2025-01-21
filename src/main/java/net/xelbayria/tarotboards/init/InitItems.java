@@ -1,5 +1,6 @@
 package net.xelbayria.tarotboards.init;
 
+import net.xelbayria.tarotboards.TarotBoards;
 import net.xelbayria.tarotboards.block.BlockBarStool;
 import net.xelbayria.tarotboards.block.BlockPokerTable;
 import net.xelbayria.tarotboards.block.base.BlockItemBase;
@@ -19,6 +20,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class InitItems {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, PCReference.MOD_ID);
@@ -27,10 +32,10 @@ public class InitItems {
 
     //----- BLOCKS ------\\
 
-    public static final RegistryObject<Block> POKER_TABLE = BLOCKS.register("poker_table", BlockPokerTable::new);
+    public static final RegistryObject<BlockPokerTable> POKER_TABLE = BLOCKS.register("poker_table", BlockPokerTable::new);
     public static final RegistryObject<Item> POKER_TABLE_ITEM = ITEMS.register("poker_table", () -> new BlockItemBase(POKER_TABLE.get()));
 
-    public static final RegistryObject<Block> BAR_STOOL = BLOCKS.register("bar_stool", BlockBarStool::new);
+    public static final RegistryObject<BlockBarStool> BAR_STOOL = BLOCKS.register("bar_stool", BlockBarStool::new);
     public static final RegistryObject<Item> BAR_STOOL_ITEM = ITEMS.register("bar_stool", () -> new BlockItemBase(BAR_STOOL.get()));
 
     //public static final RegistryObject<Block> CASINO_CARPET_SPACE = BLOCKS.register("casino_carpet_space", BlockCasinoCarpet::new);
@@ -38,26 +43,31 @@ public class InitItems {
 
     //----- ITEMS ------\\
 
-    public static final RegistryObject<Item> CARD_DECK = ITEMS.register("card_deck", ItemCardDeck::new);
-    public static final RegistryObject<Item> CARD_COVERED = ITEMS.register("card_covered", ItemCardCovered::new);
-    public static final RegistryObject<Item> CARD = ITEMS.register("card", ItemCard::new);
+    public static final RegistryObject<ItemCardDeck> CARD_DECK = ITEMS.register("card_deck", ItemCardDeck::new);
+    public static final RegistryObject<ItemCardCovered> CARD_COVERED = ITEMS.register("card_covered", ItemCardCovered::new);
 
-    public static final RegistryObject<Item> POKER_CHIP_WHITE = ITEMS.register("poker_chip_white", () -> new ItemPokerChip((byte)0, 1));
-    public static final RegistryObject<Item> POKER_CHIP_RED = ITEMS.register("poker_chip_red", () -> new ItemPokerChip((byte)1,5));
-    public static final RegistryObject<Item> POKER_CHIP_BLUE = ITEMS.register("poker_chip_blue", () -> new ItemPokerChip((byte)2,10));
-    public static final RegistryObject<Item> POKER_CHIP_GREEN = ITEMS.register("poker_chip_green", () -> new ItemPokerChip((byte)3,25));
-    public static final RegistryObject<Item> POKER_CHIP_BLACK = ITEMS.register("poker_chip_black", () -> new ItemPokerChip((byte)4,100));
+    public static final List<RegistryObject<Item>> cards = new ArrayList<>();
+
+    public static void CARDS() {
+        for (String wildName : TarotBoards.wilds) {
+            cards.add(ITEMS.register(wildName.toLowerCase(Locale.ROOT), () -> new ItemCard(wildName)));
+        }
+
+        for (String suit : TarotBoards.suits) {
+            for (String value : TarotBoards.values) {
+                cards.add(ITEMS.register((value + "_of_" + suit).toLowerCase(Locale.ROOT), () -> new ItemCard(value + " of " + suit)));
+            }
+        }
+    }
+
+    public static final RegistryObject<Item> POKER_CHIP = ITEMS.register("poker_chip", () -> new ItemPokerChip(0, 0));
 
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register(PCReference.MOD_ID, () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-            .icon(() -> new ItemStack(CARD.get()))
+            .icon(() -> new ItemStack(cards.get(0).get()))
             .displayItems(
                     (itemDisplayParameters, output) -> {
                         ITEMS.getEntries().stream().filter(object -> !(object.get() instanceof ItemCardCovered)).forEach((registryObject) -> {
-                            if (registryObject.get() instanceof ItemCardDeck deck) {
-                                deck.fillItemGroup(output);
-                            } else {
-                                output.accept(new ItemStack(registryObject.get()));
-                            }
+                            output.accept(new ItemStack(registryObject.get()));
                         });
                     }).title(Component.translatable("itemGroup." + PCReference.MOD_ID + ".tab"))
             .build());
@@ -67,6 +77,7 @@ public class InitItems {
     public static void init (IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        CARDS();
         TABS.register(modEventBus);
     }
 }

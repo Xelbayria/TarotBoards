@@ -4,17 +4,17 @@ import java.util.Random;
 
 public class ArrayHelper {
 
-    public static byte[] toPrimitive(Byte[] array) {
+    public static int[] toPrimitive(Integer[] array) {
 
         if (array == null) {
             return null;
         }
 
         else if (array.length == 0) {
-            return new byte[0];
+            return new int[0];
         }
 
-        final byte[] result = new byte[array.length];
+        final int[] result = new int[array.length];
 
         for (int i = 0; i < array.length; i++) {
             result[i] = array[i];
@@ -23,17 +23,17 @@ public class ArrayHelper {
         return result;
     }
 
-    public static Byte[] toObject(byte[] array) {
+    public static Integer[] toObject(int[] array) {
 
         if (array == null) {
             return null;
         }
 
         else if (array.length == 0) {
-            return new Byte[0];
+            return new Integer[0];
         }
 
-        final Byte[] result = new Byte[array.length];
+        final Integer[] result = new Integer[array.length];
 
         for (int i = 0; i < array.length; i++) {
             result[i] = array[i];

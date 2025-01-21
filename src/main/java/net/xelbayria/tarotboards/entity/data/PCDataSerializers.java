@@ -7,20 +7,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class PCDataSerializers {
 
-    public static final EntityDataSerializer<Byte[]> STACK = new EntityDataSerializer<>() {
+    public static final EntityDataSerializer<Integer[]> STACK = new EntityDataSerializer<>() {
 
         @Override
-        public void write(FriendlyByteBuf friendlyByteBuf, Byte @NotNull [] bytes) {
-            friendlyByteBuf.writeByteArray(ArrayHelper.toPrimitive(bytes));
+        public void write(FriendlyByteBuf friendlyByteBuf, Integer @NotNull [] integers) {
+            friendlyByteBuf.writeVarIntArray(ArrayHelper.toPrimitive(integers));
         }
 
         @Override
-        public Byte @NotNull [] read(FriendlyByteBuf friendlyByteBuf) {
-            return ArrayHelper.toObject(friendlyByteBuf.readByteArray());
+        public Integer @NotNull [] read(FriendlyByteBuf friendlyByteBuf) {
+            return ArrayHelper.toObject(friendlyByteBuf.readVarIntArray());
         }
 
         @Override
-        public Byte @NotNull [] copy(Byte @NotNull [] bytes) {
+        public Integer @NotNull [] copy(Integer @NotNull [] bytes) {
             return ArrayHelper.clone(bytes);
         }
     };

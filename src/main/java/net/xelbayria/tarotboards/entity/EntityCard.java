@@ -28,12 +28,12 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 public class EntityCard extends EntityStacked {
 
     private static final EntityDataAccessor<Float> ROTATION = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Byte> SKIN_ID = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Optional<UUID>> DECK_UUID = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> COVERED = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.BOOLEAN);
 
@@ -41,23 +41,18 @@ public class EntityCard extends EntityStacked {
         super(type, world);
     }
 
-    public EntityCard(Level world, Vec3 position, float rotation, byte skinID, UUID deckUUID, boolean covered, byte firstCardID) {
+    public EntityCard(Level world, Vec3 position, float rotation, UUID deckUUID, boolean covered, int firstCardID) {
         super(InitEntityTypes.CARD.get(), world, position);
 
         createStack();
         addToTop(firstCardID);
         this.entityData.set(ROTATION, rotation);
-        this.entityData.set(SKIN_ID, skinID);
         this.entityData.set(DECK_UUID, Optional.of(deckUUID));
         this.entityData.set(COVERED, covered);
     }
 
     public float getRotation() {
         return this.entityData.get(ROTATION);
-    }
-
-    public byte getSkinID() {
-        return this.entityData.get(SKIN_ID);
     }
 
     public UUID getDeckUUID() {
@@ -69,13 +64,10 @@ public class EntityCard extends EntityStacked {
     }
 
     private void takeCard(Player player) {
-
-        ItemStack card = new ItemStack(InitItems.CARD.get());
+        ItemStack card = new ItemStack(InitItems.cards.get(getTopStackID()).get());
         if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
 
-        card.setDamageValue(getTopStackID());
         ItemHelper.getNBT(card).putUUID("UUID", getDeckUUID());
-        ItemHelper.getNBT(card).putByte("SkinID", this.entityData.get(SKIN_ID));
         ItemHelper.getNBT(card).putBoolean("Covered", this.entityData.get(COVERED));
 
         if (!level().isClientSide) {
@@ -144,7 +136,6 @@ public class EntityCard extends EntityStacked {
     @Override
     public void moreData() {
         this.entityData.define(ROTATION, 0F);
-        this.entityData.define(SKIN_ID, (byte) 0);
         this.entityData.define(DECK_UUID, Optional.empty());
         this.entityData.define(COVERED, false);
     }
@@ -153,7 +144,6 @@ public class EntityCard extends EntityStacked {
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
         this.entityData.set(ROTATION, compoundTag.getFloat("Rotation"));
-        this.entityData.set(SKIN_ID, compoundTag.getByte("SkinID"));
         this.entityData.set(DECK_UUID, Optional.of(compoundTag.getUUID("DeckID")));
         this.entityData.set(COVERED, compoundTag.getBoolean("Covered"));
     }
@@ -162,7 +152,6 @@ public class EntityCard extends EntityStacked {
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         compoundTag.putFloat("Rotation", this.entityData.get(ROTATION));
-        compoundTag.putByte("SkinID", this.entityData.get(SKIN_ID));
         compoundTag.putUUID("DeckID", getDeckUUID());
         compoundTag.putBoolean("Covered", this.entityData.get(COVERED));
     }

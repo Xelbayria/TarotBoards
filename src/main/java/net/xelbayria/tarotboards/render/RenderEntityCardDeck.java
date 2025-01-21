@@ -23,7 +23,6 @@ public class RenderEntityCardDeck extends EntityRenderer<EntityCardDeck> {
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
 
         ItemStack cardStack = new ItemStack(InitItems.CARD_COVERED.get());
-        ItemHelper.getNBT(cardStack).putByte("SkinID", pEntity.getSkinID());
 
         pPoseStack.pushPose();
         pPoseStack.mulPose(Axis.YP.rotationDegrees(-pEntity.getRotation() + 180));

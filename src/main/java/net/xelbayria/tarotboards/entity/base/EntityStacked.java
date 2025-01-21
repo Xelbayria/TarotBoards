@@ -9,14 +9,15 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.xelbayria.tarotboards.TarotBoards;
 import net.xelbayria.tarotboards.entity.data.PCDataSerializers;
 import net.xelbayria.tarotboards.util.ArrayHelper;
 
 public abstract class EntityStacked extends Entity {
 
-    public static final byte MAX_STACK_SIZE = 52;
+    public static final int MAX_STACK_SIZE = TarotBoards.NUM_CARDS;
 
-    protected static final EntityDataAccessor<Byte[]> STACK = SynchedEntityData.defineId(EntityStacked.class, PCDataSerializers.STACK);
+    protected static final EntityDataAccessor<Integer[]> STACK = SynchedEntityData.defineId(EntityStacked.class, PCDataSerializers.STACK);
 
     public EntityStacked(EntityType<? extends EntityStacked> type, Level world) {
         super(type, world);
@@ -32,11 +33,11 @@ public abstract class EntityStacked extends Entity {
         return this.entityData.get(STACK).length;
     }
 
-    public byte getTopStackID() {
+    public int getTopStackID() {
         return getIDAt(getStackAmount() - 1);
     }
 
-    public byte getIDAt(int index) {
+    public int getIDAt(int index) {
 
         if (index >= 0 && index < getStackAmount()) {
             return this.entityData.get(STACK)[index];
@@ -46,7 +47,7 @@ public abstract class EntityStacked extends Entity {
     }
 
     public void removeFromTop() {
-        Byte[] newStack = new Byte[getStackAmount() - 1];
+        Integer[] newStack = new Integer[getStackAmount() - 1];
 
         for (int index = 0; index < newStack.length; index++) {
             newStack[index] = this.entityData.get(STACK)[index];
@@ -55,9 +56,9 @@ public abstract class EntityStacked extends Entity {
         this.entityData.set(STACK, newStack);
     }
 
-    public void addToTop(byte id) {
+    public void addToTop(int id) {
 
-        Byte[] newStack = new Byte[getStackAmount() + 1];
+        Integer[] newStack = new Integer[getStackAmount() + 1];
 
         for (int index = 0; index < getStackAmount(); index++) {
             newStack[index] = this.entityData.get(STACK)[index];
@@ -69,13 +70,13 @@ public abstract class EntityStacked extends Entity {
     }
 
     public void createStack() {
-        Byte[] newStack = new Byte[0];
+        Integer[] newStack = new Integer[0];
         this.entityData.set(STACK, newStack);
     }
 
     public void shuffleStack() {
 
-        Byte[] newStack = new Byte[getStackAmount()];
+        Integer[] newStack = new Integer[getStackAmount()];
 
         for (int index = 0; index < getStackAmount(); index++) {
             newStack[index] = this.entityData.get(STACK)[index];
@@ -115,18 +116,18 @@ public abstract class EntityStacked extends Entity {
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(STACK, new Byte[0]);
+        this.entityData.define(STACK, new Integer[0]);
         moreData();
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        this.entityData.set(STACK, ArrayHelper.toObject(compoundTag.getByteArray("Stack")));
+        this.entityData.set(STACK, ArrayHelper.toObject(compoundTag.getIntArray("Stack")));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        compoundTag.putByteArray("Stack", ArrayHelper.toPrimitive(this.entityData.get(STACK)));
+        compoundTag.putIntArray("Stack", ArrayHelper.toPrimitive(this.entityData.get(STACK)));
     }
 
     @Override
