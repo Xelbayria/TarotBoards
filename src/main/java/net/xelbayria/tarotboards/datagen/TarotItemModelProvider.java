@@ -6,11 +6,12 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+import net.xelbayria.tarotboards.PCReference;
 import net.xelbayria.tarotboards.init.InitItems;
 
 public class TarotItemModelProvider extends ItemModelProvider {
     public TarotItemModelProvider(PackOutput generator, ExistingFileHelper existingFileHelper) {
-        super(generator, "tarotboards", existingFileHelper);
+        super(generator, PCReference.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -21,6 +22,6 @@ public class TarotItemModelProvider extends ItemModelProvider {
     }
 
     private void withParent(RegistryObject<Item> item) {
-        withExistingParent(item.getId().getPath(), new ResourceLocation("tarotboards", "card" ));
+        withExistingParent(item.getId().getPath(), new ResourceLocation(PCReference.MOD_ID, "card" ));
     }
 }
