@@ -77,7 +77,7 @@ public class InitItems {
                         ITEMS.getEntries().stream().filter(object -> !(object.get() instanceof ItemCardCovered)).forEach((registryObject) -> {
                             output.accept(new ItemStack(registryObject.get()));
                         });
-                    }).title(Component.translatable("itemGroup." + PCReference.MOD_ID + ".tab"))
+                    }).title(Component.translatable("TarotBoards"))
             .build());
 
     public static void init (IEventBus modEventBus) {
