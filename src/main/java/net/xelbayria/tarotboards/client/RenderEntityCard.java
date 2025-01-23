@@ -2,6 +2,7 @@ package net.xelbayria.tarotboards.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.xelbayria.tarotboards.TarotBoards;
 import net.xelbayria.tarotboards.entity.EntityCard;
 import net.xelbayria.tarotboards.init.InitItems;
 import net.xelbayria.tarotboards.util.CardHelper;
@@ -37,8 +38,14 @@ public class RenderEntityCard extends EntityRenderer<EntityCard> {
         pPoseStack.mulPose(Axis.YP.rotationDegrees(-pEntity.getRotation() + 180));
         pPoseStack.scale(1.5F, 1.5F, 1.5F);
 
-        for (byte i = 0; i < 52; i++) {
-            CardHelper.renderItem(card, pEntity.level(), 0, i * 0.003D, 0, pPoseStack, pBuffer, pPackedLight);
+        if (pEntity.getStackAmount() >= 52) {
+            for (int i = 0; i < 52; i++) {
+                CardHelper.renderItem(card, pEntity.level(), 0, i * 0.003D, 0, pPoseStack, pBuffer, pPackedLight);
+            }
+        } else {
+            for (int i = 0; i < pEntity.getStackAmount(); i++) {
+                CardHelper.renderItem(card, pEntity.level(), 0, i * 0.003D, 0, pPoseStack, pBuffer, pPackedLight);
+            }
         }
 
         pPoseStack.popPose();
