@@ -5,7 +5,7 @@ import net.xelbayria.tarotboards.entity.data.PCDataSerializers;
 import net.xelbayria.tarotboards.event.CardInteractEvent;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
 import net.xelbayria.tarotboards.network.ModNetworking;
-import net.xelbayria.tarotboards.render.*;
+import net.xelbayria.tarotboards.client.*;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraftforge.common.MinecraftForge;

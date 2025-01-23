@@ -1,4 +1,4 @@
-package net.xelbayria.tarotboards.render;
+package net.xelbayria.tarotboards.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.xelbayria.tarotboards.entity.EntityDice;

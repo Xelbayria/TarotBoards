@@ -1,11 +1,10 @@
-package net.xelbayria.tarotboards.render;
+package net.xelbayria.tarotboards.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.xelbayria.tarotboards.entity.EntityCardDeck;
 import net.xelbayria.tarotboards.init.InitItems;
 import net.xelbayria.tarotboards.util.CardHelper;
-import net.xelbayria.tarotboards.util.ItemHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
