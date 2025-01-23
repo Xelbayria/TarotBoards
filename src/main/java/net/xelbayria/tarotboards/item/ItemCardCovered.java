@@ -92,7 +92,7 @@ public class ItemCardCovered extends ItemBase {
 
                 // Use the cardID to fetch the specific card
                 Item nextCard = InitItems.cards.get(cardID).get();
-
+                if (!heldNBT.getBoolean("Covered")) nextCard = InitItems.CARD_COVERED.get();
                 ItemStack newCard = new ItemStack(nextCard);
                 ItemHelper.getNBT(newCard).putInt("CardID", cardID);
                 ItemHelper.getNBT(newCard).putUUID("UUID", heldNBT.getUUID("UUID"));
