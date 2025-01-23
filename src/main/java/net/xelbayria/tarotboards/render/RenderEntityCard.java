@@ -39,7 +39,7 @@ public class RenderEntityCard extends EntityRenderer<EntityCard> {
         pPoseStack.mulPose(Axis.YP.rotationDegrees(-pEntity.getRotation() + 180));
         pPoseStack.scale(1.5F, 1.5F, 1.5F);
 
-        for (byte i = 0; i < pEntity.getStackAmount(); i++) {
+        for (byte i = 0; i < 52; i++) {
             CardHelper.renderItem(card, pEntity.level(), 0, i * 0.003D, 0, pPoseStack, pBuffer, pPackedLight);
         }
 
