@@ -63,12 +63,12 @@ public class ItemCardCovered extends ItemBase {
                 if (!heldNBT.contains("FlipHistory")) {
                     heldNBT.put("FlipHistory", new ListTag());
                 }
+
                 ListTag flipHistory = heldNBT.getList("FlipHistory", Tag.TAG_INT);
 
-                boolean isCurrentlyCovered = heldNBT.getBoolean("Covered");
                 int cardID;
 
-                if (isCurrentlyCovered) {
+                if (heldNBT.getBoolean("Covered")) {
                     // If uncovering: Get the last card from history or generate a new one
                     if(!ItemHelper.getNBT(heldItem).contains("CardID")) {
                         if (!flipHistory.isEmpty()) {
@@ -96,7 +96,7 @@ public class ItemCardCovered extends ItemBase {
                 ItemStack newCard = new ItemStack(nextCard);
                 ItemHelper.getNBT(newCard).putInt("CardID", cardID);
                 ItemHelper.getNBT(newCard).putUUID("UUID", heldNBT.getUUID("UUID"));
-                ItemHelper.getNBT(newCard).putBoolean("Covered", !isCurrentlyCovered);
+                ItemHelper.getNBT(newCard).putBoolean("Covered", !heldNBT.getBoolean("Covered"));
                 ItemHelper.getNBT(newCard).put("FlipHistory", flipHistory); // Save updated history
 
                 player.setItemInHand(InteractionHand.MAIN_HAND, newCard);
