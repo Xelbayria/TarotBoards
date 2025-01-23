@@ -36,6 +36,7 @@ public class EntityCard extends EntityStacked {
     private static final EntityDataAccessor<Float> ROTATION = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Optional<UUID>> DECK_UUID = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> COVERED = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.BOOLEAN);
+    private int firstCardID = 0;
 
     public EntityCard(EntityType<? extends EntityCard> type, Level world) {
         super(type, world);
@@ -49,6 +50,8 @@ public class EntityCard extends EntityStacked {
         this.entityData.set(ROTATION, rotation);
         this.entityData.set(DECK_UUID, Optional.of(deckUUID));
         this.entityData.set(COVERED, covered);
+
+        this.firstCardID = firstCardID;
     }
 
     public float getRotation() {
@@ -67,6 +70,7 @@ public class EntityCard extends EntityStacked {
         ItemStack card = new ItemStack(InitItems.cards.get(getTopStackID()).get());
         if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
 
+        ItemHelper.getNBT(card).putInt("CardID", firstCardID);
         ItemHelper.getNBT(card).putUUID("UUID", getDeckUUID());
         ItemHelper.getNBT(card).putBoolean("Covered", this.entityData.get(COVERED));
 
@@ -110,10 +114,10 @@ public class EntityCard extends EntityStacked {
     public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
         ItemStack stack = pPlayer.getItemInHand(pHand);
 
-        if (stack.getItem() instanceof ItemCardCovered) {
+        if (stack.getItem() instanceof ItemCardCovered covered) {
 
-            if (getStackAmount() < MAX_STACK_SIZE) {
-                addToTop((byte) stack.getDamageValue());
+            if (getStackAmount() <= MAX_STACK_SIZE) {
+                addToTop(firstCardID);
                 stack.shrink(1);
             }
 

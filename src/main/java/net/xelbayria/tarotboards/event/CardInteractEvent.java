@@ -12,9 +12,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class CardInteractEvent {
 
-    @SubscribeEvent
+    @SubscribeEvent()
     @OnlyIn(Dist.CLIENT)
-    public void onLeftClick(InputEvent.MouseButton event) {
+    public void onLeftClick(InputEvent.MouseButton.Pre event) {
 
         Minecraft mc = Minecraft.getInstance();
 

@@ -1,5 +1,6 @@
 package net.xelbayria.tarotboards;
 
+import net.xelbayria.tarotboards.datagen.TarotBoardsProvider;
 import net.xelbayria.tarotboards.entity.data.PCDataSerializers;
 import net.xelbayria.tarotboards.event.CardInteractEvent;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
@@ -28,6 +29,7 @@ public class TarotBoards {
         modEventBus.addListener(this::onClientSetup);
         MinecraftForge.EVENT_BUS.register(this);
         EntityDataSerializers.registerSerializer(PCDataSerializers.STACK);
+        TarotBoardsProvider.init(modEventBus);
     }
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
