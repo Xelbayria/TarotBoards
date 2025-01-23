@@ -1,5 +1,6 @@
 package net.xelbayria.tarotboards.init;
 
+import net.minecraft.world.item.DyeColor;
 import net.xelbayria.tarotboards.TarotBoards;
 import net.xelbayria.tarotboards.block.BlockBarStool;
 import net.xelbayria.tarotboards.block.BlockPokerTable;
@@ -20,9 +21,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class InitItems {
 
@@ -38,17 +37,13 @@ public class InitItems {
     public static final RegistryObject<BlockBarStool> BAR_STOOL = BLOCKS.register("bar_stool", BlockBarStool::new);
     public static final RegistryObject<Item> BAR_STOOL_ITEM = ITEMS.register("bar_stool", () -> new BlockItemBase(BAR_STOOL.get()));
 
-    //public static final RegistryObject<Block> CASINO_CARPET_SPACE = BLOCKS.register("casino_carpet_space", BlockCasinoCarpet::new);
-    //public static final RegistryObject<Item> CASINO_CARPET_SPACE_ITEM = ITEMS.register("casino_carpet_space", () -> new BlockItemBase(CASINO_CARPET_SPACE.get()));
-
     //----- ITEMS ------\\
-
-    public static final RegistryObject<ItemCardDeck> CARD_DECK = ITEMS.register("card_deck", ItemCardDeck::new);
-    public static final RegistryObject<ItemCardCovered> CARD_COVERED = ITEMS.register("card_covered", ItemCardCovered::new);
+    public static final RegistryObject<Item> CARD_DECK = ITEMS.register("card_deck", ItemCardDeck::new);
+    public static final RegistryObject<Item> CARD_COVERED = ITEMS.register("card_covered", ItemCardCovered::new);
 
     public static final List<RegistryObject<Item>> cards = new ArrayList<>();
 
-    public static void CARDS() {
+    public static void registerCards() {
         for (String wildName : TarotBoards.wilds) {
             cards.add(ITEMS.register(wildName.toLowerCase(Locale.ROOT), () -> new ItemCard(wildName)));
         }
@@ -60,7 +55,20 @@ public class InitItems {
         }
     }
 
-    public static final RegistryObject<Item> POKER_CHIP = ITEMS.register("poker_chip", () -> new ItemPokerChip(0, 0));
+    public static final List<RegistryObject<Item>> poker_chips = new ArrayList<>();
+
+    public static final Map<Integer, RegistryObject<Item>> chip = new HashMap<>();
+
+    public static void registerPokerChips() {
+        int value = 5;
+        for(DyeColor color : DyeColor.values()) {
+            int finalValue = value;
+            RegistryObject<Item> chips = ITEMS.register("poker_chip_" + color, () -> new ItemPokerChip(color.getId(), finalValue));
+            chip.put(value, chips);
+            poker_chips.add(chips);
+            value = value + 5;
+        }
+    }
 
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register(PCReference.MOD_ID, () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
             .icon(() -> new ItemStack(cards.get(0).get()))
@@ -72,12 +80,11 @@ public class InitItems {
                     }).title(Component.translatable("itemGroup." + PCReference.MOD_ID + ".tab"))
             .build());
 
-    //public static final RegistryObject<Item> DICE_WHITE = ITEMS.register("dice_white", ItemDice::new);
-
     public static void init (IEventBus modEventBus) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
-        CARDS();
+        registerCards();
+        registerPokerChips();
         TABS.register(modEventBus);
     }
 }

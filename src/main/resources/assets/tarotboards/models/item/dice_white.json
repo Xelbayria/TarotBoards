@@ -1,8 +1,0 @@
-{
-  "parent": "tarotboards:item/dice_base",
-  "textures": {
-    "0": "tarotboards:item/dice_white",
-    "particle": "tarotboards:item/dice_white"
-  }
-}
-

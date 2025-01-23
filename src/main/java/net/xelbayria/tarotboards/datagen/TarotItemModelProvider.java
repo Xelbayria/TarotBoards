@@ -16,11 +16,19 @@ public class TarotItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         for(var card : InitItems.cards) {
-            withParent(card);
+            withParentCard(card);
+        }
+
+        for(var chip : InitItems.poker_chips) {
+            withParentChip(chip);
         }
     }
 
-    private void withParent(RegistryObject<Item> item) {
+    private void withParentCard(RegistryObject<Item> item) {
         withExistingParent(item.getId().getPath(), new ResourceLocation("tarotboards", "card" ));
+    }
+
+    private void withParentChip(RegistryObject<Item> item) {
+        withExistingParent(item.getId().getPath(), new ResourceLocation("tarotboards", "poker_chip" ));
     }
 }

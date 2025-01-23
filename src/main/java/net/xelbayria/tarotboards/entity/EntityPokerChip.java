@@ -130,7 +130,7 @@ public class EntityPokerChip extends EntityStacked {
                 if (chipID == 0) amount++;
             }
 
-            if (amount > 0) spawnChip(player, InitItems.POKER_CHIP.get(), amount);
+            if (amount > 0) spawnChip(player, InitItems.chip.get(amount).get(), amount);
             discard();
 
             return false;

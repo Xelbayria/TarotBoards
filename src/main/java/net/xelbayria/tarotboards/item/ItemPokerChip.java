@@ -47,7 +47,7 @@ public class ItemPokerChip extends ItemBase {
     }
 
     public static Item getPokerChip(int pokerChipID) {
-        return InitItems.POKER_CHIP.get();
+        return InitItems.poker_chips.get(pokerChipID).get();
     }
 
     @Override

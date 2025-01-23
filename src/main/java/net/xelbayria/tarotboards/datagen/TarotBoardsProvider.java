@@ -11,5 +11,6 @@ public class TarotBoardsProvider {
     public static void dataGather(GatherDataEvent event) {
         var output = event.getGenerator().getPackOutput();
         event.getGenerator().addProvider(true, new TarotItemModelProvider(output, event.getExistingFileHelper()));
+        event.getGenerator().addProvider(true, new TarotEnglishLangProvider(output));
     }
 }
