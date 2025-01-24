@@ -71,6 +71,8 @@ public class EntityCard extends EntityStacked {
     private void takeCard(Player player) {
         ItemStack card = new ItemStack(InitItems.cards.get(getTopStackID()).get());
 
+        if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
+
         if(ItemHelper.getNBT(card).contains("CardID")) {
             ItemHelper.getNBT(card).putInt("CardID", ItemHelper.getNBT(card).getInt("CardID"));
         } else {
@@ -78,9 +80,7 @@ public class EntityCard extends EntityStacked {
         }
         ItemHelper.getNBT(card).putUUID("UUID", getDeckUUID());
         ItemHelper.getNBT(card).putBoolean("Covered", this.entityData.get(COVERED));
-
-        if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
-
+        
         if (!level().isClientSide) {
             ItemHelper.spawnStackAtEntity(level(), player, card);
         }

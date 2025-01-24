@@ -147,6 +147,10 @@ public class ItemCardCovered extends ItemBase {
 
                 CompoundTag nbt = ItemHelper.getNBT(pContext.getItemInHand());
 
+                if(!nbt.contains("UUID")) {
+                    return InteractionResult.FAIL;
+                }
+
                 UUID deckID = nbt.getUUID("UUID");
 
                 for (EntityCardDeck closeDeck : closeDecks) {
