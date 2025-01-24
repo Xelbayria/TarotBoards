@@ -34,6 +34,15 @@ public class TarotEnglishLangProvider extends LanguageProvider {
         addItem(InitItems.CARD_COVERED);
         addItem(InitItems.CARD_DECK);
         add(InitItems.TAB, "TarotBoards");
+
+        add("message.stack_full", "The stack is full!");
+        add("message.stack_empty", "Out of cards!");
+        add("message.stack_shuffled", "You shuffled the deck");
+        add("message.stack_owner_error", "Owner does not match the one of the stack!");
+        add("message.poker_chip_owner_set", "The owner has been set to you!");
+        add("message.poker_chip_owner_error", "An owner already exists!");
+        add("message.poker_chip_owner_missing", "No owner found! Cannot place!");
+        add("message.poker_chip_table_error", "The owner of your chip(s) do not match the owner of the table. Cannot place!");
     }
 
     private void addItem(RegistryObject<Item> registryObject) {

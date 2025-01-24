@@ -3415,5 +3415,13 @@
   "item.tarotboards.zodiac_of_tridents": "Zodiac Of Tridents",
   "item.tarotboards.zodiac_of_veils": "Zodiac Of Veils",
   "item.tarotboards.zodiac_of_waves": "Zodiac Of Waves",
-  "itemGroup.tarotboards.tarotboards": "TarotBoards"
+  "itemGroup.tarotboards.tarotboards": "TarotBoards",
+  "message.poker_chip_owner_error": "An owner already exists!",
+  "message.poker_chip_owner_missing": "No owner found! Cannot place!",
+  "message.poker_chip_owner_set": "The owner has been set to you!",
+  "message.poker_chip_table_error": "The owner of your chip(s) do not match the owner of the table. Cannot place!",
+  "message.stack_empty": "Out of cards!",
+  "message.stack_full": "The stack is full!",
+  "message.stack_owner_error": "Owner does not match the one of the stack!",
+  "message.stack_shuffled": "You shuffled the deck"
 }

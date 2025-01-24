@@ -1,8 +1,10 @@
 package net.xelbayria.tarotboards.entity;
 
+import net.minecraft.world.item.Item;
 import net.xelbayria.tarotboards.entity.base.EntityStacked;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
 import net.xelbayria.tarotboards.init.InitItems;
+import net.xelbayria.tarotboards.item.ItemCard;
 import net.xelbayria.tarotboards.item.ItemCardCovered;
 import net.xelbayria.tarotboards.util.ChatHelper;
 import net.xelbayria.tarotboards.util.ItemHelper;
@@ -36,7 +38,7 @@ public class EntityCard extends EntityStacked {
     private static final EntityDataAccessor<Float> ROTATION = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Optional<UUID>> DECK_UUID = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Boolean> COVERED = SynchedEntityData.defineId(EntityCard.class, EntityDataSerializers.BOOLEAN);
-    private int firstCardID = 0;
+    private int firstCardID;
 
     public EntityCard(EntityType<? extends EntityCard> type, Level world) {
         super(type, world);
@@ -68,11 +70,16 @@ public class EntityCard extends EntityStacked {
 
     private void takeCard(Player player) {
         ItemStack card = new ItemStack(InitItems.cards.get(getTopStackID()).get());
-        if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
 
-        ItemHelper.getNBT(card).putInt("CardID", firstCardID);
+        if(ItemHelper.getNBT(card).contains("CardID")) {
+            ItemHelper.getNBT(card).putInt("CardID", ItemHelper.getNBT(card).getInt("CardID"));
+        } else {
+            ItemHelper.getNBT(card).putInt("CardID", firstCardID);
+        }
         ItemHelper.getNBT(card).putUUID("UUID", getDeckUUID());
         ItemHelper.getNBT(card).putBoolean("Covered", this.entityData.get(COVERED));
+
+        if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
 
         if (!level().isClientSide) {
             ItemHelper.spawnStackAtEntity(level(), player, card);
@@ -115,7 +122,6 @@ public class EntityCard extends EntityStacked {
         ItemStack stack = pPlayer.getItemInHand(pHand);
 
         if (stack.getItem() instanceof ItemCardCovered covered) {
-
             if (getStackAmount() <= MAX_STACK_SIZE) {
                 addToTop(firstCardID);
                 stack.shrink(1);

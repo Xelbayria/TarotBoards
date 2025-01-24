@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -35,7 +36,7 @@ public class CardHelper {
             String suit = matcher.group("suit");
             return Component.literal(value).append(" ").append(Component.literal("of").append(" ").append(Component.literal(suit))).withStyle(getStyle(suit));
         } else {
-            return Component.literal(name).append("\nWild").withStyle(ChatFormatting.WHITE);
+            return Component.literal(name).append("\n Wild").withStyle(ChatFormatting.WHITE);
         }
     }
 
@@ -52,6 +53,22 @@ public class CardHelper {
             return ChatFormatting.LIGHT_PURPLE;
         } else {
             return ChatFormatting.WHITE;
+        }
+    }
+
+    public static DyeColor getStyleDye(String suit) {
+        if (RED_SUITS.contains(suit)) {
+            return DyeColor.RED;
+        } else if (BLUE_SUITS.contains(suit)) {
+            return DyeColor.BLUE;
+        } else if (YELLOW_SUITS.contains(suit)) {
+            return DyeColor.YELLOW;
+        } else if (GREEN_SUITS.contains(suit)) {
+            return DyeColor.GREEN;
+        } else if (PURPLE_SUITS.contains(suit)) {
+            return DyeColor.PURPLE;
+        } else {
+            return DyeColor.WHITE;
         }
     }
 

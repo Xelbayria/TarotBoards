@@ -1,15 +1,11 @@
 package net.xelbayria.tarotboards;
 
-import com.google.common.collect.ArrayListMultimap;
 import net.minecraft.client.color.item.ItemColor;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.RegistryObject;
 import net.xelbayria.tarotboards.datagen.TarotBoardsProvider;
 import net.xelbayria.tarotboards.entity.data.PCDataSerializers;
 import net.xelbayria.tarotboards.event.CardInteractEvent;
@@ -27,7 +23,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Mod(PCReference.MOD_ID)

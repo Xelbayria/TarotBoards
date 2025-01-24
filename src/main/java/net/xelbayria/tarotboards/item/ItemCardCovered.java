@@ -8,7 +8,6 @@ import net.xelbayria.tarotboards.entity.EntityCard;
 import net.xelbayria.tarotboards.entity.EntityCardDeck;
 import net.xelbayria.tarotboards.init.InitItems;
 import net.xelbayria.tarotboards.item.base.ItemBase;
-import net.xelbayria.tarotboards.util.CardHelper;
 import net.xelbayria.tarotboards.util.ItemHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -41,9 +40,9 @@ public class ItemCardCovered extends ItemBase {
         pTooltipComponents.add(Component.translatable("lore.cover").append(" ").withStyle(ChatFormatting.GRAY));
     }
 
-    private Set<Integer> usedCardIDs = new HashSet<>();
+    private static final Set<Integer> usedCardIDs = new HashSet<>();
 
-    private int generateValidCardID() {
+    public static int generateValidCardID() {
         int cardID;
         Random random = new Random();
         do {
@@ -54,7 +53,7 @@ public class ItemCardCovered extends ItemBase {
         return cardID;
     }
 
-    public void flipCard(ItemStack heldItem, LivingEntity entity) {
+    public static void flipCard(ItemStack heldItem, LivingEntity entity) {
         if (entity instanceof Player player) {
             if (heldItem.getItem() instanceof ItemCardCovered) {
                 CompoundTag heldNBT = ItemHelper.getNBT(heldItem);
@@ -66,28 +65,23 @@ public class ItemCardCovered extends ItemBase {
 
                 ListTag flipHistory = heldNBT.getList("FlipHistory", Tag.TAG_INT);
 
-                int cardID;
+                int cardID = generateValidCardID();
 
-                if (heldNBT.getBoolean("Covered")) {
-                    // If uncovering: Get the last card from history or generate a new one
-                    if(!ItemHelper.getNBT(heldItem).contains("CardID")) {
-                        if (!flipHistory.isEmpty()) {
-                            cardID = heldNBT.getInt("CardID");
-                        } else {
-                            cardID = generateValidCardID();
-                            flipHistory.add(IntTag.valueOf(cardID));
-                            ItemHelper.getNBT(heldItem).putInt("CardID", cardID);
-                        }
+                // If uncovering: Get the last card from history or generate a new one
+                if (!ItemHelper.getNBT(heldItem).contains("CardID")) {
+                    if (!flipHistory.isEmpty()) {
+                        cardID = heldNBT.getInt("CardID");
                     } else {
-                        if (!flipHistory.isEmpty()) {
-                            cardID = heldNBT.getInt("CardID");
-                            flipHistory.remove(flipHistory.size() - 1);
-                        } else {
-                            cardID = heldNBT.getInt("CardID");
-                        }
+                        flipHistory.add(IntTag.valueOf(cardID));
+                        ItemHelper.getNBT(heldItem).putInt("CardID", cardID);
                     }
                 } else {
-                    cardID = heldNBT.getInt("CardID");
+                    if (!flipHistory.isEmpty()) {
+                        cardID = heldNBT.getInt("CardID");
+                        flipHistory.remove(flipHistory.size() - 1);
+                    } else {
+                        cardID = heldNBT.getInt("CardID");
+                    }
                 }
 
                 // Use the cardID to fetch the specific card
@@ -160,6 +154,14 @@ public class ItemCardCovered extends ItemBase {
                     if (closeDeck.getUUID().equals(deckID)) {
 
                         Level world = pContext.getLevel();
+
+                        if (!nbt.contains("CardID")) {
+                            if (player.getMainHandItem().getItem() instanceof ItemCardCovered) {
+                                int cardID = generateValidCardID();
+                                ItemHelper.getNBT(player.getMainHandItem()).putInt("CardID", cardID);
+                            }
+                        }
+
                         EntityCard cardDeck = new EntityCard(world, pContext.getClickLocation(), pContext.getRotation(), deckID, nbt.getBoolean("Covered"), nbt.getInt("CardID"));
                         world.addFreshEntity(cardDeck);
                         pContext.getItemInHand().shrink(1);
@@ -169,7 +171,6 @@ public class ItemCardCovered extends ItemBase {
                 }
             }
         }
-
         return InteractionResult.PASS;
     }
 }
