@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -118,7 +119,7 @@ public class EntityCard extends EntityStacked {
     }
 
     @Override
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
+    public @NotNull InteractionResult interact(Player pPlayer, @NotNull InteractionHand pHand) {
         ItemStack stack = pPlayer.getItemInHand(pHand);
 
         if (stack.getItem() instanceof ItemCardCovered covered) {
@@ -138,7 +139,7 @@ public class EntityCard extends EntityStacked {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         this.entityData.set(COVERED, !this.entityData.get(COVERED));
         return true;
     }
@@ -167,7 +168,7 @@ public class EntityCard extends EntityStacked {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }
