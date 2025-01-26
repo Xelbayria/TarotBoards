@@ -8,12 +8,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.xelbayria.tarotboards.entity.*;
 import net.xelbayria.tarotboards.CommonClass;
-import net.xelbayria.tarotboards.PCReference;
+import net.xelbayria.tarotboards.TBConstants;
 
 public class InitEntityTypes {
 
     //TODO: CHANGE THIS TO USE TAROT CARDS
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, PCReference.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, TBConstants.MOD_ID);
 
     public static final RegistryObject<EntityType<EntityCard>> CARD = ENTITY_TYPES.register("card", () -> EntityType.Builder.<EntityCard>of(EntityCard::new, MobCategory.MISC).sized(0.5F, 0.5F).build(CommonClass.customLocation("card").toString()));
     public static final RegistryObject<EntityType<EntityCardDeck>> CARD_DECK = ENTITY_TYPES.register("card_deck", () -> EntityType.Builder.<EntityCardDeck>of(EntityCardDeck::new, MobCategory.MISC).sized(0.5F, 0.5F).build(CommonClass.customLocation("card_deck").toString()));

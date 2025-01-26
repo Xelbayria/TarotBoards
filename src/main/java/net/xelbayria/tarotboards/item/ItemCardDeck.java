@@ -2,14 +2,9 @@ package net.xelbayria.tarotboards.item;
 
 import net.xelbayria.tarotboards.entity.EntityCardDeck;
 import net.xelbayria.tarotboards.item.base.ItemBase;
-import net.xelbayria.tarotboards.PCReference;
-import net.xelbayria.tarotboards.util.CardHelper;
-import net.xelbayria.tarotboards.util.ItemHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;

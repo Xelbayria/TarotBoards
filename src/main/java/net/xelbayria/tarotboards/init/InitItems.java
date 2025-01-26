@@ -9,7 +9,7 @@ import net.xelbayria.tarotboards.item.ItemCard;
 import net.xelbayria.tarotboards.item.ItemCardCovered;
 import net.xelbayria.tarotboards.item.ItemCardDeck;
 import net.xelbayria.tarotboards.item.ItemPokerChip;
-import net.xelbayria.tarotboards.PCReference;
+import net.xelbayria.tarotboards.TBConstants;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -25,9 +25,9 @@ import java.util.*;
 
 public class InitItems {
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, PCReference.MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, PCReference.MOD_ID);
-    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, PCReference.MOD_ID);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TBConstants.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TBConstants.MOD_ID);
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TBConstants.MOD_ID);
 
     //----- BLOCKS ------\\
 
@@ -70,7 +70,7 @@ public class InitItems {
         }
     }
 
-    public static final RegistryObject<CreativeModeTab> TAB = TABS.register(PCReference.MOD_ID, () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+    public static final RegistryObject<CreativeModeTab> TAB = TABS.register(TBConstants.MOD_ID, () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
             .icon(() -> new ItemStack(cards.get(0).get()))
             .displayItems(
                     (itemDisplayParameters, output) -> {

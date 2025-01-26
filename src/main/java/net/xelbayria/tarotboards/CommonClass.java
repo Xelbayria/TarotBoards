@@ -17,6 +17,6 @@ public class CommonClass {
     }
 
     public static ResourceLocation customLocation(String name) {
-        return new ResourceLocation(PCReference.MOD_ID, name);
+        return new ResourceLocation(TBConstants.MOD_ID, name);
     }
 }

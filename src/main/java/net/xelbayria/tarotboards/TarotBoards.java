@@ -25,7 +25,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@Mod(PCReference.MOD_ID)
+@Mod(TBConstants.MOD_ID)
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class TarotBoards {
 
