@@ -1,13 +1,5 @@
 package net.xelbayria.tarotboards.entity;
 
-import net.minecraft.world.item.Item;
-import net.xelbayria.tarotboards.entity.base.EntityStacked;
-import net.xelbayria.tarotboards.init.InitEntityTypes;
-import net.xelbayria.tarotboards.init.InitItems;
-import net.xelbayria.tarotboards.item.ItemCard;
-import net.xelbayria.tarotboards.item.ItemCardCovered;
-import net.xelbayria.tarotboards.util.ChatHelper;
-import net.xelbayria.tarotboards.util.ItemHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -27,11 +19,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import net.xelbayria.tarotboards.TBConstants;
+import net.xelbayria.tarotboards.entity.base.EntityStacked;
+import net.xelbayria.tarotboards.init.InitEntityTypes;
+import net.xelbayria.tarotboards.init.InitItems;
+import net.xelbayria.tarotboards.item.ItemCardCovered;
+import net.xelbayria.tarotboards.util.ChatHelper;
+import net.xelbayria.tarotboards.util.ItemHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 public class EntityCard extends EntityStacked {
@@ -82,7 +80,7 @@ public class EntityCard extends EntityStacked {
         ItemHelper.getNBT(card).putUUID("UUID", getDeckUUID());
         ItemHelper.getNBT(card).putBoolean("Covered", this.entityData.get(COVERED));
         
-        if (!level().isClientSide) {
+        if (!getLevel().isClientSide) {
             ItemHelper.spawnStackAtEntity(level(), player, card);
         }
 
@@ -97,11 +95,11 @@ public class EntityCard extends EntityStacked {
     public void tick() {
         super.tick();
 
-        if (level().getGameTime() % 20 == 0) {
+        if (getLevel().getGameTime() % 20 == 0) {
 
             BlockPos pos = blockPosition();
 
-            List<EntityCardDeck> closeDecks = level().getEntitiesOfClass(EntityCardDeck.class, new AABB(pos.getX() - 20, pos.getY() - 20, pos.getZ() - 20, pos.getX() + 20, pos.getY() + 20, pos.getZ() + 20));
+            List<EntityCardDeck> closeDecks = getLevel().getEntitiesOfClass(EntityCardDeck.class, new AABB(pos.getX() - 20, pos.getY() - 20, pos.getZ() - 20, pos.getX() + 20, pos.getY() + 20, pos.getZ() + 20));
 
             boolean foundParentDeck = false;
 
@@ -129,7 +127,7 @@ public class EntityCard extends EntityStacked {
             }
 
             else {
-                if (level().isClientSide) ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_full"), pPlayer);
+                if (getLevel().isClientSide) ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_full"), pPlayer);
             }
         }
 
@@ -170,5 +168,14 @@ public class EntityCard extends EntityStacked {
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    public Level getLevel() {
+        try {
+            return level();
+        } catch (Exception e) {
+            TBConstants.LOGGER.error("Level Error: {}", String.valueOf(e));
+            return level();
+        }
     }
 }
