@@ -120,7 +120,7 @@ public class EntityCard extends EntityStacked {
     public @NotNull InteractionResult interact(Player pPlayer, @NotNull InteractionHand pHand) {
         ItemStack stack = pPlayer.getItemInHand(pHand);
 
-        if (stack.getItem() instanceof ItemCardCovered covered) {
+        if (stack.getItem() instanceof ItemCardCovered) {
             if (getStackAmount() <= MAX_STACK_SIZE) {
                 addToTop(firstCardID);
                 stack.shrink(1);
