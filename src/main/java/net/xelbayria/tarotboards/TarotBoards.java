@@ -54,7 +54,7 @@ public class TarotBoards {
             "Despair", "Past", "Present", "Future", "Gate", "Sign", "Ruin", "Snow", "Rain", "Tempest", "Lovers",
             "Discord", "Concord", "Harmony", "Dissonance", "Earth", "Fire", "Water", "Air", "Spirit",
             "Oblivion", "Obscurity", "Purgatory", "Nether", "Underworld", "Aether", "Overworld", "Limbo", "Chaos",
-            "Balance", "Doom", "Peace", "Evil", "Good", "Neutral", "Hope"
+            "Balance", "Doom", "Peace", "Evil", "Good", "Neutral", "Hope", "Monster", "Human"
     );
 
     public static final List<String> suits = List.of(
@@ -67,7 +67,7 @@ public class TarotBoards {
 
     public static final List<String> values = List.of(
             //Negative Cards
-            "Shadow", "Specter", "Phantom", "Void", "Wraith",
+            "Devil", "Shadow", "Specter", "Phantom", "Void", "Wraith",
             "Ghoul", "Banshee", "Reverent", "Eidolon", "Shade",
             "Doppelganger", "Hollow", "Abyss", "Chimera", "Poltergeist",
             "Wight", "Apparition", "Nightmare", "Succubus", "Incubus",
@@ -85,8 +85,9 @@ public class TarotBoards {
             "Rune", "Fable", "Sorceress", "Utopia", "Wizard",
             "Titan", "Baron", "Illusionist", "Oracle", "Magician",
             "Luminary", "Eclipse", "Celestial", "Duke", "Genesis",
-            "Zephyr", "Vesper", "Umbra", "Valkyrie",
-            "Warden", "Zenith", "Yggdrasil", "Zodiac", "Phoenix", "Raven", "Cipher"
+            "Zephyr", "Vesper", "Umbra", "Valkyrie", "Warden",
+            "Zenith", "Yggdrasil", "Zodiac", "Phoenix", "Raven",
+            "Cipher", "Angel"
     );
 
     public static final int NUM_CARDS = (suits.size() * values.size()) + wilds.size();
