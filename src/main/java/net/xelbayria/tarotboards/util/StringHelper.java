@@ -4,12 +4,9 @@ import java.text.DecimalFormat;
 
 public class StringHelper {
 
-    public static String printCommas (int amount) {
-
-        String number = String.valueOf(amount);
-        double amountD = Double.parseDouble(number);
+    public static String printCommas(long amount) {
         DecimalFormat formatter = new DecimalFormat("#,###");
-
-        return formatter.format(amountD);
+        return formatter.format(amount);
     }
 }
+

@@ -24,9 +24,9 @@ import java.util.List;
 public class ItemPokerChip extends ItemBase {
 
     private final int chipID;
-    private final int value;
+    private final long value;  // Changed to long
 
-    public ItemPokerChip(int chipID, int value) {
+    public ItemPokerChip(int chipID, long value) {  // Constructor updated
         super(new Properties());
         this.chipID = chipID;
         this.value = value;
@@ -34,6 +34,10 @@ public class ItemPokerChip extends ItemBase {
 
     public int getChipID() {
         return this.chipID;
+    }
+
+    public long getValue() {  // Getter for value
+        return this.value;
     }
 
     public static Item getPokerChip(int pokerChipID) {
@@ -47,13 +51,13 @@ public class ItemPokerChip extends ItemBase {
         pTooltipComponents.add(Component.literal(ChatFormatting.GRAY + "Value (1): " + ChatFormatting.GOLD + value));
 
         if (pStack.getCount() > 1) {
-            pTooltipComponents.add(Component.literal(ChatFormatting.GRAY + "Value (" + pStack.getCount() + "): " + ChatFormatting.GOLD + StringHelper.printCommas(value * pStack.getCount())));
+            long totalValue = value * (long) pStack.getCount();
+            pTooltipComponents.add(Component.literal(ChatFormatting.GRAY + "Value (" + pStack.getCount() + "): " + ChatFormatting.GOLD + StringHelper.printCommas(totalValue)));
         }
     }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level pLevel, Player pPlayer, @NotNull InteractionHand pUsedHand) {
-        // There is no crouch interaction anymore
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
 

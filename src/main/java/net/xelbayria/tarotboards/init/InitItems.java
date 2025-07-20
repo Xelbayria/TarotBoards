@@ -46,16 +46,27 @@ public class InitItems {
 
     public static final List<RegistryObject<Item>> poker_chips = new ArrayList<>();
 
-    public static final Map<Integer, RegistryObject<Item>> chip = new HashMap<>();
+    public static final Map<Long, RegistryObject<Item>> chip = new HashMap<>();
+
+    private static final long[] CHIP_VALUES = {
+            5L, 10L, 25L, 50L, 100L, 500L, 1000L, 5000L, 10000L, 50000L,
+            75000L, 100000L, 250000L, 500000L, 1000000L, 2000000L
+    };
 
     public static void registerPokerChips() {
-        int value = 5;
-        for(DyeColor color : DyeColor.values()) {
-            int finalValue = value;
-            RegistryObject<Item> chips = ITEMS.register("poker_chip_" + color, () -> new ItemPokerChip(color.getId(), finalValue));
-            chip.put(value, chips);
+        int index = 0;
+        for (DyeColor color : DyeColor.values()) {
+            long finalValue = index < CHIP_VALUES.length ? CHIP_VALUES[index] : 1L;
+
+            RegistryObject<Item> chips = ITEMS.register(
+                    "poker_chip_" + color,
+                    () -> new ItemPokerChip(color.getId(), finalValue)
+            );
+
+            chip.put(finalValue, chips);
             poker_chips.add(chips);
-            value = value + 5;
+
+            index++;
         }
     }
 
