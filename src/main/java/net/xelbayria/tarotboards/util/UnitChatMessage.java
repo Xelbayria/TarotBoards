@@ -23,7 +23,7 @@ public class UnitChatMessage {
     }
 
     private MutableComponent getUnitName() {
-        return Component.translatable("unitname." + unitName);
+        return Component.translatable(unitName);
     }
 
 }

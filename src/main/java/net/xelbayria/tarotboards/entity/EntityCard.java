@@ -24,6 +24,7 @@ import net.xelbayria.tarotboards.entity.base.EntityStacked;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
 import net.xelbayria.tarotboards.init.InitItems;
 import net.xelbayria.tarotboards.item.ItemCardCovered;
+import net.xelbayria.tarotboards.util.ArrayHelper;
 import net.xelbayria.tarotboards.util.ChatHelper;
 import net.xelbayria.tarotboards.util.ItemHelper;
 import org.jetbrains.annotations.NotNull;
@@ -72,14 +73,14 @@ public class EntityCard extends EntityStacked {
 
         if (this.entityData.get(COVERED)) card = new ItemStack(InitItems.CARD_COVERED.get());
 
-        if(ItemHelper.getNBT(card).contains("CardID")) {
+        if (ItemHelper.getNBT(card).contains("CardID")) {
             ItemHelper.getNBT(card).putInt("CardID", ItemHelper.getNBT(card).getInt("CardID"));
         } else {
             ItemHelper.getNBT(card).putInt("CardID", firstCardID);
         }
         ItemHelper.getNBT(card).putUUID("UUID", getDeckUUID());
         ItemHelper.getNBT(card).putBoolean("Covered", this.entityData.get(COVERED));
-        
+
         if (!getLevel().isClientSide) {
             ItemHelper.spawnStackAtEntity(level(), player, card);
         }
@@ -99,18 +100,28 @@ public class EntityCard extends EntityStacked {
 
             BlockPos pos = blockPosition();
 
-            List<EntityCardDeck> closeDecks = getLevel().getEntitiesOfClass(EntityCardDeck.class, new AABB(pos.getX() - 20, pos.getY() - 20, pos.getZ() - 20, pos.getX() + 20, pos.getY() + 20, pos.getZ() + 20));
+            List<EntityCardDeck> closeDecks = getLevel().getEntitiesOfClass(
+                    EntityCardDeck.class,
+                    new AABB(pos.getX() - 20, pos.getY() - 20, pos.getZ() - 20,
+                            pos.getX() + 20, pos.getY() + 20, pos.getZ() + 20)
+            );
 
             boolean foundParentDeck = false;
 
-            for (EntityCardDeck closeDeck : closeDecks) {
-
-                if (getDeckUUID().equals(closeDeck.getUUID())) {
-                    foundParentDeck = true;
+            UUID deckUUID = getDeckUUID();
+            if (deckUUID != null) {
+                for (EntityCardDeck closeDeck : closeDecks) {
+                    UUID closeDeckUUID = closeDeck.getUUID();
+                    if (deckUUID.equals(closeDeckUUID)) {
+                        foundParentDeck = true;
+                        break;
+                    }
                 }
             }
 
-            if (!foundParentDeck) discard();
+            if (!foundParentDeck) {
+                discard();
+            }
 
             super.onRemovedFromWorld();
         }
@@ -124,14 +135,11 @@ public class EntityCard extends EntityStacked {
             if (getStackAmount() <= MAX_STACK_SIZE) {
                 addToTop(firstCardID);
                 stack.shrink(1);
+            } else {
+                if (getLevel().isClientSide)
+                    ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_full"), pPlayer);
             }
-
-            else {
-                if (getLevel().isClientSide) ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_full"), pPlayer);
-            }
-        }
-
-        else takeCard(pPlayer);
+        } else takeCard(pPlayer);
 
         return InteractionResult.SUCCESS;
     }
@@ -150,20 +158,50 @@ public class EntityCard extends EntityStacked {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        super.readAdditionalSaveData(compoundTag);
-        this.entityData.set(ROTATION, compoundTag.getFloat("Rotation"));
-        this.entityData.set(DECK_UUID, Optional.of(compoundTag.getUUID("DeckID")));
-        this.entityData.set(COVERED, compoundTag.getBoolean("Covered"));
+    protected void addAdditionalSaveData(CompoundTag compoundTag) {
+        super.addAdditionalSaveData(compoundTag);
+
+        compoundTag.putInt("FirstCardID", firstCardID);
+        compoundTag.putIntArray("Stack", ArrayHelper.toPrimitive(this.entityData.get(STACK)));
+        compoundTag.putFloat("Rotation", this.entityData.get(ROTATION));
+
+        UUID deckUUID = getDeckUUID();
+        if (deckUUID != null) {
+            compoundTag.putUUID("DeckID", deckUUID);
+        }
+
+        compoundTag.putBoolean("Covered", this.entityData.get(COVERED));
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        super.addAdditionalSaveData(compoundTag);
-        compoundTag.putFloat("Rotation", this.entityData.get(ROTATION));
-        compoundTag.putUUID("DeckID", getDeckUUID());
-        compoundTag.putBoolean("Covered", this.entityData.get(COVERED));
+    protected void readAdditionalSaveData(CompoundTag compoundTag) {
+        super.readAdditionalSaveData(compoundTag);
+
+        if (compoundTag.contains("FirstCardID")) {
+            firstCardID = compoundTag.getInt("FirstCardID");
+        } else {
+            firstCardID = 0; // safe default
+        }
+
+        if (compoundTag.contains("Stack")) {
+            this.entityData.set(STACK, ArrayHelper.toObject(compoundTag.getIntArray("Stack")));
+        }
+
+        if (compoundTag.contains("Rotation")) {
+            this.entityData.set(ROTATION, compoundTag.getFloat("Rotation"));
+        }
+
+        if (compoundTag.contains("DeckID")) {
+            this.entityData.set(DECK_UUID, Optional.of(compoundTag.getUUID("DeckID")));
+        } else {
+            this.entityData.set(DECK_UUID, Optional.empty());
+        }
+
+        if (compoundTag.contains("Covered")) {
+            this.entityData.set(COVERED, compoundTag.getBoolean("Covered"));
+        }
     }
+
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {

@@ -35,7 +35,7 @@ public class RenderEntityCard extends EntityRenderer<EntityCard> {
             card = new ItemStack(InitItems.CARD_COVERED.get());
         } else {
             String name = card.getDescriptionId();
-            name = WordUtils.capitalizeFully(name.replace("item.tarotboards.", "").replace("_", " "));
+            name = WordUtils.capitalizeFully(name.replace("item.tarotboard.", "").replace("_", " "));
 
             String[] lines = name.split(" ");
 
@@ -47,7 +47,7 @@ public class RenderEntityCard extends EntityRenderer<EntityCard> {
                 for (String line : lines) {
                     float f = (float) (-this.getFont().width(line) / 2);
                     pPoseStack.translate(0, 12, 0);
-                    this.getFont().drawInBatch(line, f, -25, CardHelper.getStyleDye(suit).getTextColor(), false, pPoseStack.last().pose(), pBuffer, Font.DisplayMode.POLYGON_OFFSET, 0, pPackedLight);
+                    this.getFont().drawInBatch(line, f, -25, CardHelper.getStyle(suit).getColor(), false, pPoseStack.last().pose(), pBuffer, Font.DisplayMode.POLYGON_OFFSET, 0, pPackedLight);
                 }
             } else {
                 this.translateSignText(pPoseStack, pEntity);

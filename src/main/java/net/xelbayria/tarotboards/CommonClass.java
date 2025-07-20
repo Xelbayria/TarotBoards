@@ -13,6 +13,6 @@ public class CommonClass {
     }
 
     public static ResourceLocation customLocation(String name) {
-        return new ResourceLocation(TBConstants.MOD_ID, name);
+        return ResourceLocation.fromNamespaceAndPath(TBConstants.MOD_ID, name);
     }
 }

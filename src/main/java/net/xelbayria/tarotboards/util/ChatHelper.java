@@ -13,7 +13,7 @@ public class ChatHelper {
      * @param players The Players that will receive the message.
      */
     public static void printModMessage (ChatFormatting format, MutableComponent component, Entity... players) {
-        UnitChatMessage unitMessage = new UnitChatMessage("mod_name", players);
+        UnitChatMessage unitMessage = new UnitChatMessage("Tarot Board", players);
         unitMessage.printMessage(format, component);
     }
 }

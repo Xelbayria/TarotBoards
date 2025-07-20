@@ -29,8 +29,8 @@ import java.util.regex.Pattern;
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 public class TarotBoard {
 
-    public TarotBoard() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public TarotBoard(FMLJavaModLoadingContext context) {
+        IEventBus modEventBus = context.getModEventBus();
         CommonClass.init(modEventBus);
         modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(this::onClientSetup);
