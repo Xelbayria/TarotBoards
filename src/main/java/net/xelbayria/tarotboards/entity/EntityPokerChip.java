@@ -42,13 +42,13 @@ public class EntityPokerChip extends EntityStacked {
         super(InitEntityTypes.POKER_CHIP.get(), world, position);
 
         createStack();
-        addToTop(firstChipID);
+        addToTop(firstChipID, false);
         this.entityData.set(OWNER_UUID, Optional.of(ownerID));
         this.entityData.set(OWNER_NAME, ownerName);
     }
 
     public UUID getOwnerUUID() {
-        return (this.entityData.get(OWNER_UUID).isPresent()) ? this.entityData.get(OWNER_UUID).get() : null;
+        return this.entityData.get(OWNER_UUID).orElse(null);
     }
 
     private void takeChip(Player player) {
@@ -85,33 +85,27 @@ public class EntityPokerChip extends EntityStacked {
 
                             if (getStackAmount() < MAX_STACK_SIZE && stack.getCount() > 0) {
                                 ItemPokerChip chip = (ItemPokerChip) stack.getItem();
-                                addToTop(chip.getChipID());
+                                addToTop(chip.getChipID(), false);
                                 stack.shrink(1);
-                            }
-
-                            else break;
+                            } else break;
                         }
-                    }
-
-                    else {
+                    } else {
 
                         if (getStackAmount() < MAX_STACK_SIZE) {
                             ItemPokerChip chip = (ItemPokerChip) stack.getItem();
-                            addToTop(chip.getChipID());
+                            addToTop(chip.getChipID(), false);
                             stack.shrink(1);
-                        }
-
-                        else {
-                            if (level().isClientSide) ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_full"), pPlayer);
+                        } else {
+                            if (level().isClientSide)
+                                ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_full"), pPlayer);
                         }
                     }
-                }
-
-                else if (level().isClientSide) ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_owner_error"), pPlayer);
+                } else if (level().isClientSide)
+                    ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_owner_error"), pPlayer);
             }
+        } else {
+            takeChip(pPlayer);
         }
-
-        else takeChip(pPlayer);
 
         return InteractionResult.SUCCESS;
     }
@@ -123,7 +117,9 @@ public class EntityPokerChip extends EntityStacked {
 
             int amount = 0;
 
-            for (int i = 0; i < this.entityData.get(STACK).length; i++) {
+            Integer[] stackIds = this.entityData.get(STACK_IDS);
+
+            for (int i = 0; i < stackIds.length; i++) {
 
                 int chipID = getIDAt(i);
 

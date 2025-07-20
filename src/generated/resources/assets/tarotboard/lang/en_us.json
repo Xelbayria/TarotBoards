@@ -3496,6 +3496,7 @@
   "item.tarotboard.zodiac_of_veils": "Zodiac Of Veils",
   "item.tarotboard.zodiac_of_waves": "Zodiac Of Waves",
   "lore.cover": "The way of the Stars",
+  "message.cannot_mix_covered_uncovered": "You cannot mix covered and uncovered cards in the same stack!",
   "message.poker_chip_owner_error": "An owner already exists!",
   "message.poker_chip_owner_missing": "No owner found! Cannot place!",
   "message.poker_chip_owner_set": "The owner has been set to you!",

@@ -36,6 +36,7 @@ public class TarotBoard {
         modEventBus.addListener(this::onClientSetup);
         MinecraftForge.EVENT_BUS.register(this);
         EntityDataSerializers.registerSerializer(PCDataSerializers.STACK);
+        EntityDataSerializers.registerSerializer(PCDataSerializers.BOOLEAN_ARRAY);
         TarotBoardProvider.init(modEventBus);
     }
 

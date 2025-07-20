@@ -34,11 +34,14 @@ public class EntityCardDeck extends EntityStacked {
 
     public EntityCardDeck(Level world, Vec3 position, float rotation) {
         super(InitEntityTypes.CARD_DECK.get(), world, position);
-
         createAndFillDeck();
         shuffleStack();
-
         this.entityData.set(ROTATION, rotation);
+    }
+
+    @Override
+    public void moreData() {
+        this.entityData.define(ROTATION, 0F);
     }
 
     public float getRotation() {
@@ -46,68 +49,62 @@ public class EntityCardDeck extends EntityStacked {
     }
 
     private void createAndFillDeck() {
+        Integer[] newStackIDs = new Integer[TarotBoard.NUM_CARDS];
+        Boolean[] newStackCovered = new Boolean[TarotBoard.NUM_CARDS];
 
-        Integer[] newStack = new Integer[TarotBoard.NUM_CARDS];
-
-        for (int index = 0; index < TarotBoard.NUM_CARDS; index++) {
-            newStack[index] = index;
+        for (int i = 0; i < TarotBoard.NUM_CARDS; i++) {
+            newStackIDs[i] = i;
+            newStackCovered[i] = true;
         }
 
-        this.entityData.set(STACK, newStack);
+        this.entityData.set(STACK_IDS, newStackIDs);
+        this.entityData.set(STACK_COVERED, newStackCovered);
     }
 
     @Override
-    public InteractionResult interact(Player pPlayer, InteractionHand pHand) {
-        if (pHand == InteractionHand.MAIN_HAND) {
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        if (hand == InteractionHand.MAIN_HAND) {
+            int stackAmount = getStackAmount();
+            if (stackAmount > 0) {
+                int topCardID = getTopStackID();
+                boolean topCovered = isCoveredAt(stackAmount - 1);
 
-            if (getStackAmount() > 0) {
+                ItemStack cardStack = new ItemStack(InitItems.CARD_COVERED.get());
+                cardStack.setDamageValue(topCardID);
 
-                int cardID = getTopStackID();
-
-                ItemStack card = new ItemStack(InitItems.CARD_COVERED.get());
-
-                card.setDamageValue(cardID);
-                ItemHelper.getNBT(card).putUUID("UUID", getUUID());
-                ItemHelper.getNBT(card).putBoolean("Covered", true);
+                CompoundTag nbt = ItemHelper.getNBT(cardStack);
+                nbt.putUUID("UUID", getUUID());
+                nbt.putBoolean("Covered", topCovered);
 
                 if (!level().isClientSide) {
-                    ItemHelper.spawnStackAtEntity(level(), pPlayer, card);
+                    ItemHelper.spawnStackAtEntity(level(), player, cardStack);
+                    removeFromTop();
                 }
 
-                removeFromTop();
-
-                return pPlayer.getMainHandItem().isEmpty() ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+                return player.getMainHandItem().isEmpty() ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+            } else if (level().isClientSide) {
+                ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_empty"), player);
             }
-
-            else if (level().isClientSide) ChatHelper.printModMessage(ChatFormatting.RED, Component.translatable("message.stack_empty"), pPlayer);
         }
-
         return InteractionResult.FAIL;
     }
 
     @Override
-    public boolean hurt(DamageSource pSource, float pAmount) {
-        if (pSource.getDirectEntity() instanceof Player player) {
-
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getDirectEntity() instanceof Player player) {
             if (player.isCrouching()) {
-                ItemStack deck = new ItemStack(InitItems.CARD_DECK.get());
-
-                ItemHelper.spawnStackAtEntity(level(), player, deck);
+                ItemStack deckItem = new ItemStack(InitItems.CARD_DECK.get());
+                ItemHelper.spawnStackAtEntity(level(), player, deckItem);
                 discard();
             } else {
                 shuffleStack();
-                if (level().isClientSide) ChatHelper.printModMessage(ChatFormatting.GREEN, Component.translatable("message.stack_shuffled"), player);
+                if (level().isClientSide) {
+                    ChatHelper.printModMessage(ChatFormatting.GREEN, Component.translatable("message.stack_shuffled"), player);
+                }
             }
-
             return true;
         }
-
         return false;
-    }
-
-    @Override
-    public void moreData() {
-        this.entityData.define(ROTATION, 0F);
     }
 
     @Override

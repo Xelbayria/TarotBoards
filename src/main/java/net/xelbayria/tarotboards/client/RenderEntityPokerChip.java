@@ -24,6 +24,10 @@ public class RenderEntityPokerChip extends EntityRenderer<EntityPokerChip> {
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
 
         pPoseStack.pushPose();
+
+        double zFightOffset = (pEntity.getId() % 1000) * 0.00005D;
+        pPoseStack.translate(0, zFightOffset, 0);
+
         pPoseStack.translate(0, 0.01D, 0.07D);
         pPoseStack.scale(0.5F, 0.5F, 0.5F);
 
@@ -33,10 +37,19 @@ public class RenderEntityPokerChip extends EntityRenderer<EntityPokerChip> {
             Random randomX = new Random(i * 200000);
             Random randomY = new Random(i * 100000);
 
-            pPoseStack.translate(randomX.nextDouble() * 0.05D - 0.025D, 0, randomY.nextDouble() * 0.05D - 0.025D);
+            pPoseStack.translate(
+                    randomX.nextDouble() * 0.05D - 0.025D,
+                    0,
+                    randomY.nextDouble() * 0.05D - 0.025D
+            );
             pPoseStack.mulPose(Axis.XN.rotationDegrees(90));
 
-            CardHelper.renderItem(new ItemStack(ItemPokerChip.getPokerChip(pEntity.getIDAt(i))), pEntity.level(), 0, 0,i * 0.032D, pPoseStack, pBuffer, pPackedLight);
+            CardHelper.renderItem(
+                    new ItemStack(ItemPokerChip.getPokerChip(pEntity.getIDAt(i))),
+                    pEntity.level(),
+                    0, 0, i * 0.032D,
+                    pPoseStack, pBuffer, pPackedLight
+            );
 
             pPoseStack.popPose();
         }

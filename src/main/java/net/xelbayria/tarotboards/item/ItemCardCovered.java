@@ -166,7 +166,7 @@ public class ItemCardCovered extends ItemBase {
                             }
                         }
 
-                        EntityCard cardDeck = new EntityCard(world, pContext.getClickLocation(), pContext.getRotation(), deckID, nbt.getBoolean("Covered"), nbt.getInt("CardID"));
+                        EntityCard cardDeck = new EntityCard(world, pContext.getClickLocation(), pContext.getRotation(), deckID, nbt.getInt("CardID"), nbt.getBoolean("Covered"));
                         world.addFreshEntity(cardDeck);
                         pContext.getItemInHand().shrink(1);
 
