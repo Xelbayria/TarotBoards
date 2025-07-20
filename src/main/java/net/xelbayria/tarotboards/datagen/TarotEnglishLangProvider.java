@@ -32,7 +32,8 @@ public class TarotEnglishLangProvider extends LanguageProvider {
 
         addItem(InitItems.CARD_COVERED);
         addItem(InitItems.CARD_DECK);
-        add(InitItems.TAB, "Tarot Board");
+        add("tab.general.tarotboard", "Tarot Board");
+        add("lore.cover", "The way of the Stars");
 
         add("message.stack_full", "The stack is full!");
         add("message.stack_empty", "Out of cards!");

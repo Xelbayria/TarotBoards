@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "tarotboards:item/card_front",
-		"1": "tarotboards:item/card_back",
-		"particle": "tarotboards:item/card_front",
+		"0": "tarotboard:item/card_front",
+		"1": "tarotboard:item/card_back",
+		"particle": "tarotboard:item/card_front",
 		"inventory": "tarotboard:item/card_front"
 	},
 	"elements": [
