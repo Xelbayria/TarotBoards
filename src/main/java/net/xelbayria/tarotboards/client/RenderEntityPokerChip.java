@@ -37,7 +37,7 @@ public class RenderEntityPokerChip extends EntityRenderer<EntityPokerChip> {
 
         for (int i = 0; i < stackAmount; i++) {
             int chipID = entity.getIDAt(i);
-            if (chipID == 0) continue;
+            if (chipID < 0) continue;
 
             poseStack.pushPose();
 
