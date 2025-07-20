@@ -2,21 +2,10 @@ package net.xelbayria.tarotboards.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.FastColor;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.entity.SignText;
-import net.minecraft.world.phys.Vec3;
-import net.xelbayria.tarotboards.TarotBoards;
+import net.xelbayria.tarotboards.TarotBoard;
 import net.xelbayria.tarotboards.entity.EntityCard;
 import net.xelbayria.tarotboards.init.InitItems;
 import net.xelbayria.tarotboards.util.CardHelper;
@@ -26,11 +15,6 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.text.WordUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
 
 public class RenderEntityCard extends EntityRenderer<EntityCard> {
 
@@ -55,7 +39,7 @@ public class RenderEntityCard extends EntityRenderer<EntityCard> {
 
             String[] lines = name.split(" ");
 
-            if (!TarotBoards.wilds.contains(name) && lines.length > 1) {
+            if (!TarotBoard.wilds.contains(name) && lines.length > 1) {
                 // Process normal cards
                 String value = lines[0];
                 String suit = lines[2];

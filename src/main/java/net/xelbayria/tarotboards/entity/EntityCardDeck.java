@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.xelbayria.tarotboards.TarotBoards;
+import net.xelbayria.tarotboards.TarotBoard;
 import net.xelbayria.tarotboards.entity.base.EntityStacked;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
 import net.xelbayria.tarotboards.init.InitItems;
@@ -47,9 +47,9 @@ public class EntityCardDeck extends EntityStacked {
 
     private void createAndFillDeck() {
 
-        Integer[] newStack = new Integer[TarotBoards.NUM_CARDS];
+        Integer[] newStack = new Integer[TarotBoard.NUM_CARDS];
 
-        for (int index = 0; index < TarotBoards.NUM_CARDS; index++) {
+        for (int index = 0; index < TarotBoard.NUM_CARDS; index++) {
             newStack[index] = index;
         }
 

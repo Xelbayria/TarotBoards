@@ -3,7 +3,7 @@ package net.xelbayria.tarotboards.item;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.xelbayria.tarotboards.TarotBoards;
+import net.xelbayria.tarotboards.TarotBoard;
 import net.xelbayria.tarotboards.entity.EntityCard;
 import net.xelbayria.tarotboards.entity.EntityCardDeck;
 import net.xelbayria.tarotboards.init.InitItems;
@@ -46,7 +46,7 @@ public class ItemCardCovered extends ItemBase {
         int cardID;
         Random random = new Random();
         do {
-            cardID = random.nextInt(TarotBoards.NUM_CARDS); // Generate random ID
+            cardID = random.nextInt(TarotBoard.NUM_CARDS); // Generate random ID
         } while (usedCardIDs.contains(cardID)); // Keep generating if ID is already used
 
         usedCardIDs.add(cardID); // Mark this ID as used

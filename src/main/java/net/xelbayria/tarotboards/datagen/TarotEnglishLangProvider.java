@@ -6,13 +6,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.registries.RegistryObject;
+import net.xelbayria.tarotboards.TBConstants;
 import net.xelbayria.tarotboards.init.InitEntityTypes;
 import net.xelbayria.tarotboards.init.InitItems;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class TarotEnglishLangProvider extends LanguageProvider {
     public TarotEnglishLangProvider(PackOutput generator) {
-        super(generator, "tarotboards", "en_us");
+        super(generator, TBConstants.MOD_ID, "en_us");
     }
 
     @Override
@@ -29,11 +30,9 @@ public class TarotEnglishLangProvider extends LanguageProvider {
         addEntityType(InitEntityTypes.CARD_DECK, "Card Deck");
         addEntityType(InitEntityTypes.POKER_CHIP, "Poker Chip");
 
-        addBlock(InitItems.POKER_TABLE);
-        addBlock(InitItems.BAR_STOOL);
         addItem(InitItems.CARD_COVERED);
         addItem(InitItems.CARD_DECK);
-        add(InitItems.TAB, "TarotBoards");
+        add(InitItems.TAB, "Tarot Board");
 
         add("message.stack_full", "The stack is full!");
         add("message.stack_empty", "Out of cards!");

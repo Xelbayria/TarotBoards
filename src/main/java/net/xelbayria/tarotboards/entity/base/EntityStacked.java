@@ -9,13 +9,13 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.xelbayria.tarotboards.TarotBoards;
+import net.xelbayria.tarotboards.TarotBoard;
 import net.xelbayria.tarotboards.entity.data.PCDataSerializers;
 import net.xelbayria.tarotboards.util.ArrayHelper;
 
 public abstract class EntityStacked extends Entity {
 
-    public static final int MAX_STACK_SIZE = TarotBoards.NUM_CARDS;
+    public static final int MAX_STACK_SIZE = TarotBoard.NUM_CARDS;
 
     protected static final EntityDataAccessor<Integer[]> STACK = SynchedEntityData.defineId(EntityStacked.class, PCDataSerializers.STACK);
 

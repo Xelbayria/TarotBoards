@@ -1,10 +1,7 @@
 package net.xelbayria.tarotboards.init;
 
 import net.minecraft.world.item.DyeColor;
-import net.xelbayria.tarotboards.TarotBoards;
-import net.xelbayria.tarotboards.block.BlockBarStool;
-import net.xelbayria.tarotboards.block.BlockPokerTable;
-import net.xelbayria.tarotboards.block.base.BlockItemBase;
+import net.xelbayria.tarotboards.TarotBoard;
 import net.xelbayria.tarotboards.item.ItemCard;
 import net.xelbayria.tarotboards.item.ItemCardCovered;
 import net.xelbayria.tarotboards.item.ItemCardDeck;
@@ -29,14 +26,6 @@ public class InitItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TBConstants.MOD_ID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TBConstants.MOD_ID);
 
-    //----- BLOCKS ------\\
-
-    public static final RegistryObject<BlockPokerTable> POKER_TABLE = BLOCKS.register("poker_table", BlockPokerTable::new);
-    public static final RegistryObject<Item> POKER_TABLE_ITEM = ITEMS.register("poker_table", () -> new BlockItemBase(POKER_TABLE.get()));
-
-    public static final RegistryObject<BlockBarStool> BAR_STOOL = BLOCKS.register("bar_stool", BlockBarStool::new);
-    public static final RegistryObject<Item> BAR_STOOL_ITEM = ITEMS.register("bar_stool", () -> new BlockItemBase(BAR_STOOL.get()));
-
     //----- ITEMS ------\\
     public static final RegistryObject<Item> CARD_DECK = ITEMS.register("card_deck", ItemCardDeck::new);
     public static final RegistryObject<Item> CARD_COVERED = ITEMS.register("card_covered", ItemCardCovered::new);
@@ -44,12 +33,12 @@ public class InitItems {
     public static final List<RegistryObject<Item>> cards = new ArrayList<>();
 
     public static void registerCards() {
-        for (String wildName : TarotBoards.wilds) {
+        for (String wildName : TarotBoard.wilds) {
             cards.add(ITEMS.register(wildName.toLowerCase(Locale.ROOT), () -> new ItemCard(wildName)));
         }
 
-        for (String suit : TarotBoards.suits) {
-            for (String value : TarotBoards.values) {
+        for (String suit : TarotBoard.suits) {
+            for (String value : TarotBoard.values) {
                 cards.add(ITEMS.register((value + "_of_" + suit).toLowerCase(Locale.ROOT), () -> new ItemCard(value + " of " + suit)));
             }
         }
@@ -77,7 +66,7 @@ public class InitItems {
                         ITEMS.getEntries().stream().filter(object -> !(object.get() instanceof ItemCardCovered)).forEach((registryObject) -> {
                             output.accept(new ItemStack(registryObject.get()));
                         });
-                    }).title(Component.translatable("TarotBoards"))
+                    }).title(Component.translatable("tab.general.tarotboard"))
             .build());
 
     public static void init (IEventBus modEventBus) {

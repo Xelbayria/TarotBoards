@@ -3,9 +3,7 @@ package net.xelbayria.tarotboards.item;
 import net.xelbayria.tarotboards.entity.EntityPokerChip;
 import net.xelbayria.tarotboards.init.InitItems;
 import net.xelbayria.tarotboards.item.base.ItemBase;
-import net.xelbayria.tarotboards.tileentity.TileEntityPokerTable;
 import net.xelbayria.tarotboards.util.ItemHelper;
-import net.xelbayria.tarotboards.util.Location;
 import net.xelbayria.tarotboards.util.StringHelper;
 import net.xelbayria.tarotboards.util.UnitChatMessage;
 import net.minecraft.ChatFormatting;
@@ -20,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -102,7 +99,6 @@ public class ItemPokerChip extends ItemBase {
             if (!player.isCrouching()) {
 
                 Level world = pContext.getLevel();
-                Location location = new Location(world, pContext.getClickedPos());
 
                 UnitChatMessage unitMessage = getUnitMessage(player);
                 CompoundTag nbt = ItemHelper.getNBT(pContext.getItemInHand());
@@ -111,20 +107,6 @@ public class ItemPokerChip extends ItemBase {
 
                     UUID ownerID = nbt.getUUID("OwnerID");
                     String ownerName = nbt.getString("OwnerName");
-
-                    if (location.getBlockState().hasBlockEntity()) {
-
-                        BlockEntity tileEntity = location.getTileEntity();
-
-                        if (tileEntity instanceof TileEntityPokerTable pokerTable) {
-
-                            if (!ownerID.equals(pokerTable.getOwnerID())) {
-
-                                if (world.isClientSide) unitMessage.printMessage(ChatFormatting.RED, Component.translatable("message.poker_chip_table_error"));
-                                return InteractionResult.PASS;
-                            }
-                        }
-                    }
 
                     EntityPokerChip chip = new EntityPokerChip(world, pContext.getClickLocation(), ownerID, ownerName, chipID);
                     world.addFreshEntity(chip);
