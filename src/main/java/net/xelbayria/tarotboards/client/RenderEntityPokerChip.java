@@ -2,63 +2,70 @@ package net.xelbayria.tarotboards.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.xelbayria.tarotboards.entity.EntityPokerChip;
-import net.xelbayria.tarotboards.item.ItemPokerChip;
-import net.xelbayria.tarotboards.util.CardHelper;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.xelbayria.tarotboards.entity.EntityPokerChip;
+import net.xelbayria.tarotboards.item.ItemPokerChip;
+import net.xelbayria.tarotboards.util.CardHelper;
 
 import java.util.Random;
 
 public class RenderEntityPokerChip extends EntityRenderer<EntityPokerChip> {
 
-    public RenderEntityPokerChip(EntityRendererProvider.Context pContext) {
-        super(pContext);
+    public RenderEntityPokerChip(EntityRendererProvider.Context context) {
+        super(context);
     }
 
     @Override
-    public void render(EntityPokerChip pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
-        super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
+    public void render(EntityPokerChip entity, float entityYaw, float partialTick,
+                       PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
 
-        pPoseStack.pushPose();
+        super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
 
-        double zFightOffset = (pEntity.getId() % 1000) * 0.00005D;
-        pPoseStack.translate(0, zFightOffset, 0);
+        poseStack.pushPose();
 
-        pPoseStack.translate(0, 0.01D, 0.07D);
-        pPoseStack.scale(0.5F, 0.5F, 0.5F);
+        double zFightOffset = (entity.getId() % 1000) * 0.00005D;
+        poseStack.translate(0, zFightOffset, 0);
 
-        for (byte i = 0; i < pEntity.getStackAmount(); i++) {
-            pPoseStack.pushPose();
+        poseStack.translate(0, 0.01D, 0.07D);
+        poseStack.scale(0.5F, 0.5F, 0.5F);
 
-            Random randomX = new Random(i * 200000);
-            Random randomY = new Random(i * 100000);
+        int stackAmount = Math.min(entity.getStackAmount(), 64);
 
-            pPoseStack.translate(
+        for (int i = 0; i < stackAmount; i++) {
+            int chipID = entity.getIDAt(i);
+            if (chipID == 0) continue;
+
+            poseStack.pushPose();
+
+            Random randomX = new Random(i * 200000L);
+            Random randomY = new Random(i * 100000L);
+
+            poseStack.translate(
                     randomX.nextDouble() * 0.05D - 0.025D,
                     0,
                     randomY.nextDouble() * 0.05D - 0.025D
             );
-            pPoseStack.mulPose(Axis.XN.rotationDegrees(90));
+            poseStack.mulPose(Axis.XN.rotationDegrees(90));
 
             CardHelper.renderItem(
-                    new ItemStack(ItemPokerChip.getPokerChip(pEntity.getIDAt(i))),
-                    pEntity.level(),
+                    new ItemStack(ItemPokerChip.getPokerChip(chipID)),
+                    entity.level(),
                     0, 0, i * 0.032D,
-                    pPoseStack, pBuffer, pPackedLight
+                    poseStack, buffer, packedLight
             );
 
-            pPoseStack.popPose();
+            poseStack.popPose();
         }
 
-        pPoseStack.popPose();
+        poseStack.popPose();
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityPokerChip pEntity) {
-        return null;
+    public ResourceLocation getTextureLocation(EntityPokerChip entity) {
+        return null; // Not used when rendering item stacks
     }
 }
